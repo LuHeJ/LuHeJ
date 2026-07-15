@@ -1379,6 +1379,7 @@
             const scrollEnterBtn = document.getElementById('scrollEnterBtn');
             const mainWrapper = document.getElementById('mainWrapper');
 
+            /** 欢迎弹窗关闭标记 — 防止 dismissWelcome() 被重复调用 */
             let welcomeDismissed = false;
 
             
@@ -1483,36 +1484,49 @@
                 initParticles();
             });
 
+            /**
+             * @class Particle
+             * @description 粒子实体 — HSL 色相 340-360（红色谱）匹配设计主题。
+             *              环绕屏幕边缘移动（toroidal wrapping），
+             *              带 opacity 呼吸式脉动（0.1 ~ 0.7）。
+             */
             class Particle {
                 constructor() {
                     this.reset();
                 }
+                /** 随机初始化粒子属性 */
                 reset() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 1.8 + 0.4;
-                    this.speedX = (Math.random() - 0.5) * 0.35;
-                    this.speedY = (Math.random() - 0.5) * 0.35;
-                    this.opacity = Math.random() * 0.5 + 0.2;
-                    this.opacitySpeed = (Math.random() - 0.5) * 0.008;
-                    this.hue = Math.random() * 20 + 340;
+                    this.x = Math.random() * canvas.width;          // 随机 X 坐标
+                    this.y = Math.random() * canvas.height;         // 随机 Y 坐标
+                    this.size = Math.random() * 1.8 + 0.4;          // 粒子大小 (0.4 ~ 2.2)
+                    this.speedX = (Math.random() - 0.5) * 0.35;    // X 方向漂移速度
+                    this.speedY = (Math.random() - 0.5) * 0.35;    // Y 方向漂移速度
+                    this.opacity = Math.random() * 0.5 + 0.2;      // 基础透明度 (0.2 ~ 0.7)
+                    this.opacitySpeed = (Math.random() - 0.5) * 0.008; // 透明度呼吸速率
+                    this.hue = Math.random() * 20 + 340;            // HSL 色相 340~360（红色谱）
                 }
+                /** 更新位置 + 呼吸式透明度脉动 + 环绕屏幕边缘 */
                 update() {
                     this.x += this.speedX;
                     this.y += this.speedY;
                     this.opacity += this.opacitySpeed;
+                    // 透明度在 0.1~0.7 之间往复，到达边界时反转方向
                     if (this.opacity > 0.7) this.opacitySpeed = -Math.abs(this.opacitySpeed);
                     if (this.opacity < 0.1) this.opacitySpeed = Math.abs(this.opacitySpeed);
+                    // Toroidal wrapping: +20/-20 缓冲区确保粒子完全移出后再瞬移
                     if (this.x < -20) this.x = canvas.width + 20;
                     if (this.x > canvas.width + 20) this.x = -20;
                     if (this.y < -20) this.y = canvas.height + 20;
                     if (this.y > canvas.height + 20) this.y = -20;
                 }
+                /** 双层渲染：实心核 + 2.5x 外发光晕 */
                 draw() {
+                    // 内层：实心粒子核，饱和度 70%，亮度 65%
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.fillStyle = `hsla(${this.hue}, 70%, 65%, ${this.opacity})`;
                     ctx.fill();
+                    // 外层：2.5 倍半径柔光晕，alpha 仅为核心 12%
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
                     ctx.fillStyle = `hsla(${this.hue}, 70%, 65%, ${this.opacity * 0.12})`;
@@ -1586,10 +1600,13 @@
                 sectionObserver.disconnect();
             });
 
+            // 开发诊断日志
             console.log('%c👋 你好！欢迎来到鹿禾的个人主页 %c✨',
                 'font-size:1.2em;font-weight:bold;color:#ff6659;font-family:"VT323",monospace;');
+            // 页面初始化诊断日志
             console.log('%c在黑红夜色中，很高兴遇见你。', 'color:#b8b8b8;');
             console.log('%cSCENCE 01 主 IDLE LOOP — 已就绪', 'color:#6b6b6b;font-style:italic;');
+            // 页面转场说明
             console.log('%c页面转场动画：旧页左滑 → 新页从右侧滑入', 'color:#ff6659;font-size:0.85em;');
             console.log('%c所有内容区域均从右侧进入 ✨', 'color:#ff6659;font-size:0.85em;');
         })();

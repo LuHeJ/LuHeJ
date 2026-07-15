@@ -2188,8 +2188,9 @@
 
                 /**
          * @class Particle
-         * @description 粒子实体 - 在画布上自动漂移 + 正弦 alpha 脉动
-         *              reset() 用于窗口大小变化时重新随机分布
+         * @description 粒子实体 — 自动漂移 + 独立正弦 alpha 脉动周期。
+         *              每个粒子有双层渲染：实心核 + 外发光晕。
+         *              reset() 用于窗口 resize 时重新随机分布位置。
          */
         class Particle {
             constructor() {
@@ -2224,9 +2225,8 @@
             }
         }
 
-                /**
-         * 初始化粒子数组
-         * @returns {void}
+        /**
+         * 初始化粒子数组 — 创建 particleCount 个随机分布的粒子
          */
         function initParticles() {
             particles = [];
@@ -2275,9 +2275,11 @@
 
         let mouseX = -1000;
         let mouseY = -1000;
-                /**
-         * 鼠标交互 - 120px 范围内粒子受排斥力影响
-         * @description 力与距离成反比，最大力系数 0.05
+        /**
+         * 鼠标交互 — 粒子排斥力
+         * @description 120px 半径内粒子被推离鼠标位置。
+         *              排斥力与距离成反比（越近力越大），最大力系数 0.05。
+         *              初始 mouseX/mouseY = -1000 确保页面加载时无排斥。
          */
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
@@ -2313,10 +2315,11 @@
             bgAudio.volume = parseInt(volumeSlider.value) / 100;
         }
 
-                /**
+        /**
          * 同步音乐按钮 UI 与播放状态
-         * @description playing 类触发 pulse 动画，图标在 暂停/播放 间切换
-         * @returns {void}
+         * @description piano 类触发外发光 pulse 动画 + noteBounce 图标跳动。
+         *              图标在 ♫（暂停态）和 ♪（播放态）间切换，
+         *              title 属性同步更新以提供无障碍提示。
          */
         function updateMusicBtnUI() {
             if (!bgAudio || !musicPlayBtn || !noteIcon) return;
@@ -2404,11 +2407,10 @@
             profileCardEl
         ].filter(Boolean);
 
-                /**
-         * 显示欢迎覆盖层
-         * @description 覆盖层淡入的同时，所有固定 UI 元素添加 overlay-active 类淡出，
-         *              形成页面加载时的初始欢迎状态
-         * @returns {void}
+        /**
+         * 显示欢迎覆盖层 — 所有固定 UI 同步隐藏
+         * @description 三重守卫：welcomeOverlay 存在 + 未在 visible 态 + 未在 fading-out 态
+         *              overlay-active 类触发 opacity: 0 过渡（1s），与覆盖层 fade-in 同步。
          */
         function showWelcomeOverlay() {
             if (
@@ -2709,6 +2711,7 @@
             console.error('❌ Vue 3 未能加载，请检查网络或CDN地址');
         }
 
+        // 开发诊断日志：确认全部初始化完成
         console.log('🖤 LuHe 个人主页已就绪');
     </script>
 </body>

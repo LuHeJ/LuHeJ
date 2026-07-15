@@ -188,6 +188,7 @@ export default function App() {
 
         {/* ===== Hero 内容区 ===== */}
         <div
+          {/* dark 类应用于此 div，向下级联到 .dark .liquid-glass 等规则 */}
           className={`px-6 sm:px-10 lg:px-14 flex flex-col items-center text-center ${
             isDark ? 'dark' : ''
           }`}
@@ -202,7 +203,10 @@ export default function App() {
             </span>
           </div>
 
-          {/* 主标题 — 移动端在 "Endlessly" 后换行，桌面端在 "Endlessly" 后换行 */}
+          {/* 主标题 — 双 br 实现响应式断行：
+              sm:hidden br 仅在移动端换行，hidden sm:inline br 仅在桌面端换行。
+              结果：移动端 "Clarity in an Endlessly" / "Noisy Universe"
+                    桌面端 "Clarity in an Endlessly" / "Noisy Universe" */}
           <h1
             className="text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.1] max-w-4xl font-normal hero-content tracking-tight"
             style={{ color: textColor }}
@@ -276,7 +280,9 @@ export default function App() {
         {/* 下间距：将 Stats 推至底部 */}
         <div className="flex-1" />
 
-        {/* ===== 底部统计栏 ===== */}
+        {/* ===== 底部统计栏 =====
+            移动端：直接换行排列，无分隔符
+            桌面端：竖线 | 分隔符（hidden sm:inline），节省移动端空间 */}
         <div
           className="flex flex-wrap items-center justify-center gap-2 sm:gap-0 px-6 pb-6 text-white/70 text-xs sm:text-sm"
           style={{ fontFamily: 'system-ui, sans-serif' }}
