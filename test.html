@@ -1,21 +1,35 @@
 <!DOCTYPE html>
+<!--
+  @file test.html
+  @description 鹿禾(LuHe) 个人主页 - 实验版
+                与 index.html 共享核心架构，差异点：
+                - 右上角新增页面导航指示器 (nav-dash 横条)
+                - 个人信息卡使用白色毛玻璃风格 (vs 红色暗调)
+                - Vue 标签页：关于我 / 项目作品 / 技能领域 / 联系方式
+                - Vue data 包含 projects 项目数组
+                - 导航指示器与 Vue 内部 currentTab 双向同步
+  @author LuHe
+  @dependencies Vue 3 (CDN), Google Fonts (VT323)
+  @note 音频使用 base64 静默占位 WAV，替换 src 即可使用自己的音乐
+-->
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LuHe / miao~</title>
 
-    <!-- Google Fonts - VT323 -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
 
-    <!-- Vue 3 CDN -->
+    
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js">
     </script>
 
     <style>
-        :root {
+        /* ===== 设计令牌 (Design Tokens) ===== */
+:root {
             --bg-deep: #0a0505;
             --red-dark: #882222;
             --red-mid: #b43838;
@@ -51,7 +65,8 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ==================== 背景画布 ==================== */
+        
+        /* ===== 粒子动画画布 (z-1) ===== */
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -62,6 +77,7 @@
             pointer-events: none;
         }
 
+        /* ===== 暗角遮罩 (z-2) ===== */
         .vignette {
             position: fixed;
             top: 0;
@@ -75,6 +91,7 @@
                 radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
         }
 
+        /* ===== 网格纹理背景 (z-1) ===== */
         .grid-bg {
             position: fixed;
             top: 0;
@@ -89,7 +106,8 @@
             background-size: 60px 60px;
         }
 
-        /* ==================== 左上角Logo ==================== */
+        
+        /* ===== 左上角 Logo 组件 ===== */
         .logo {
             position: fixed;
             top: 32px;
@@ -148,7 +166,8 @@
             text-shadow: 0 0 10px rgba(200, 50, 50, 0.5);
         }
 
-        /* ==================== 右上角面板容器 ==================== */
+        
+        /* ===== 右上角面板容器 ===== */
         .top-right-panel {
             position: fixed;
             top: 28px;
@@ -166,7 +185,8 @@
             transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ==================== 音乐控制器 ==================== */
+        
+        /* ===== 音乐控制器 (毛玻璃胶囊) ===== */
         .music-controller {
             display: flex;
             align-items: center;
@@ -257,6 +277,7 @@
             }
         }
 
+        /* --- 音量滑块 --- */
         .volume-slider-wrap {
             display: flex;
             align-items: center;
@@ -313,7 +334,10 @@
             background: linear-gradient(90deg, #661a1a 0%, #a03535 60%, #c84040 100%);
         }
 
-        /* ==================== 页面导航提示栏 ==================== */
+        
+        /* ===== 页面导航指示器 (test.html 独有) =====
+           4 个横条 dash 对应 4 个 Vue 场景，
+           激活态 dash 变亮变长 + ::after 波纹效果 */
         .page-nav-indicator {
             display: flex;
             align-items: center;
@@ -378,7 +402,8 @@
             transition: all 0s;
         }
 
-        /* ==================== 左下角欢迎区 ==================== */
+        
+        /* ===== 左下角欢迎区 ===== */
         .welcome-area {
             position: fixed;
             bottom: 80px;
@@ -477,7 +502,9 @@
             color: rgba(220, 130, 130, 0.6);
         }
 
-        /* ==================== 右下角个人信息卡（向左移动） ==================== */
+        
+        /* ===== 右下角个人信息卡 (白色毛玻璃) =====
+           与 index.html 的暗红风格不同，此处使用白色半透明 + 高 blur */
         .profile-card {
             position: fixed;
             bottom: 115px;
@@ -568,7 +595,8 @@
             line-height: 1.3;
         }
 
-        /* ==================== 底部状态栏（左右边距对称） ==================== */
+        
+        /* ===== 底部状态栏 ===== */
         .status-bar {
             position: fixed;
             bottom: 16px;
@@ -618,7 +646,8 @@
             }
         }
 
-        /* ==================== 右侧装饰线 ==================== */
+        
+        /* ===== 右侧装饰线 ===== */
         .side-line {
             position: fixed;
             top: 15%;
@@ -636,7 +665,8 @@
             transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ==================== 右下角控制按钮 ==================== */
+        
+        /* ===== 右下角控制按钮组 ===== */
         .controls {
             position: fixed;
             bottom: 20px;
@@ -681,7 +711,8 @@
             transition: transform 0.1s ease;
         }
 
-        /* ==================== 滑动进入遮罩 ==================== */
+        
+        /* ===== 滑动过渡遮罩 (z-100) ===== */
         .slide-mask {
             position: fixed;
             top: 0;
@@ -696,7 +727,8 @@
             left: 0;
         }
 
-        /* ==================== 毛玻璃欢迎覆盖层 ==================== */
+        
+        /* ===== 毛玻璃欢迎覆盖层 (z-15) ===== */
         .welcome-overlay {
             position: fixed;
             top: 0;
@@ -852,8 +884,10 @@
             }
         }
 
+        
         /* ============================================================
-           Vue 全屏内容区域样式
+           Vue 3 全屏覆盖层系统 (z-200)
+           左侧导航栏 + 右侧内容区，panel-fade 过渡
            ============================================================ */
         .vue-overlay-root {
             position: fixed;
@@ -867,7 +901,7 @@
             font-family: 'VT323', "Microsoft YaHei", "PingFang SC", monospace, sans-serif;
         }
 
-        /* Vue Transition 动画 */
+        
         .vue-overlay-enter-active {
             transition: all 0.55s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -883,7 +917,8 @@
             opacity: 0;
         }
 
-        /* Vue 覆盖层主容器 */
+        
+        /* --- Vue 主容器 (纯暗色背景，无背景图) --- */
         .vue-main-overlay {
             position: absolute;
             top: 0;
@@ -898,7 +933,8 @@
             z-index: 1;
         }
 
-        /* 左侧导航栏 */
+        
+        /* --- 左侧导航栏 --- */
         .vue-sidebar {
             width: 220px;
             min-width: 220px;
@@ -984,7 +1020,8 @@
             background: #f5c0c0;
         }
 
-        /* 右侧内容区 */
+        
+        /* --- 右侧内容区 --- */
         .vue-content-area {
             flex: 1;
             height: 100%;
@@ -1056,7 +1093,7 @@
             background: rgba(180, 50, 50, 0.7);
         }
 
-        /* 内容面板过渡 */
+        
         .panel-fade-enter-active,
         .panel-fade-leave-active {
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1070,7 +1107,8 @@
             transform: translateY(-8px);
         }
 
-        /* 内容卡片样式 */
+        
+        /* --- 内容卡片 --- */
         .vue-card {
             background: rgba(25, 8, 8, 0.5);
             border: 1px solid rgba(140, 35, 35, 0.3);
@@ -1140,7 +1178,8 @@
             text-shadow: 0 0 10px rgba(220, 80, 80, 0.5);
         }
 
-        /* ==================== 响应式 ==================== */
+        
+        /* ===== 响应式：平板 (<=768px) ===== */
         @media (max-width: 768px) {
             .top-right-panel {
                 top: 14px;
@@ -1260,7 +1299,7 @@
                 letter-spacing: 1.5px;
             }
 
-            /* Vue 区域响应式 */
+            
             .vue-main-overlay {
                 flex-direction: column;
             }
@@ -1324,6 +1363,7 @@
                 font-size: 28px;
             }
         }
+/* ===== 响应式：手机 (<=480px) ===== */
         @media (max-width: 480px) {
             .top-right-panel {
                 top: 8px;
@@ -1445,15 +1485,7 @@
 </head>
 <body>
 
-    <!--
-    ============================================================
-    背景音乐说明：
-    要替换为自己的音乐文件，请修改下面 <audio> 标签的 src 属性。
-    支持格式：.mp3, .wav, .ogg, .m4a
-    示例：<audio id="bgAudio" src="你的音乐文件.mp3" loop preload="auto"></audio>
-    也可以使用网络URL：src="https://example.com/music.mp3"
-    ============================================================
-    -->
+    
     <audio
     id="bgAudio"
     src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA="
@@ -1461,19 +1493,23 @@
     preload="auto"
     ></audio>
 
-    <!-- 粒子背景画布 -->
+    
+    <!-- ===== 背景层 ===== -->
     <canvas id="particle-canvas"></canvas>
 
-    <!-- 网格背景 -->
+    
+    <!-- ===== 网格纹理 ===== -->
     <div class="grid-bg"></div>
 
-    <!-- 暗角遮罩 -->
+    
+    <!-- ===== 暗角遮罩 ===== -->
     <div class="vignette"></div>
 
-    <!-- 右侧装饰线（初始隐藏，点击进入主页后淡入） -->
+    
+    <!-- ===== 固定 UI 元素 ===== -->
     <div class="side-line overlay-active"></div>
 
-    <!-- 左上角Logo（初始隐藏，点击进入主页后淡入） -->
+    
     <div class="logo overlay-active">
         <span class="dot"></span>
         <span class="luhe">LuHe</span>
@@ -1481,9 +1517,9 @@
         <span class="miaow">miao~</span>
     </div>
 
-    <!-- 右上角面板：音乐控制器 + 页面导航（初始隐藏，点击进入主页后淡入） -->
+    
     <div class="top-right-panel overlay-active" id="topRightPanel">
-        <!-- 音乐控制器 -->
+        
         <div class="music-controller" id="musicController" title="背景音乐控制">
             <button class="music-play-btn" id="musicPlayBtn" aria-label="播放/暂停背景音乐">
                 <span class="note-icon">♫</span>
@@ -1502,7 +1538,7 @@
             </div>
         </div>
 
-        <!-- 页面导航提示栏 -->
+        
         <div class="page-nav-indicator" id="pageNavIndicator" title="页面导航 · 当前第1页 / 共4页">
             <span class="nav-dash active" data-page="1" title="场景 01 · 当前"></span>
             <span class="nav-dash" data-page="2" title="场景 02"></span>
@@ -1511,7 +1547,7 @@
         </div>
     </div>
 
-    <!-- 左下角欢迎区（初始隐藏，点击进入主页后淡入） -->
+    
     <div class="welcome-area overlay-active" id="welcomeArea">
         <div class="welcome-text">欢迎宾至，鹿禾的主页。</div>
         <button class="enter-btn" id="enterBtn">
@@ -1521,7 +1557,7 @@
         <div class="enter-hint">SLIDE RIGHT TO ENTER</div>
     </div>
 
-    <!-- 右下角个人信息卡（初始隐藏，点击进入主页后淡入，已向左移动） -->
+    
     <div class="profile-card overlay-active" id="profileCard">
         <div class="profile-label">PROFILE</div>
         <div class="profile-name">LuHe</div>
@@ -1536,7 +1572,7 @@
         </div>
     </div>
 
-    <!-- 底部状态栏（初始隐藏，点击进入主页后淡入） -->
+    
     <div class="status-bar overlay-active">
         <span>SCENCE 01 主 IDLE LOOP</span>
         <div class="progress-track">
@@ -1544,13 +1580,14 @@
         </div>
     </div>
 
-    <!-- 右下角控制按钮（初始隐藏，点击进入主页后淡入） -->
+    
     <div class="controls overlay-active">
         <div class="control-btn" title="音效">🎤</div>
         <div class="control-btn" title="设置">⚙</div>
     </div>
 
-    <!-- 毛玻璃欢迎覆盖层 -->
+    
+    <!-- ===== 毛玻璃欢迎覆盖层 ===== -->
     <div class="welcome-overlay" id="welcomeOverlay">
         <div class="welcome-overlay-inner">
             <h1 class="welcome-title">别来无恙啊！</h1>
@@ -1561,16 +1598,18 @@
         <div class="welcome-subtle">WELCOME · 鹿禾</div>
     </div>
 
-    <!-- 滑动过渡遮罩 -->
+    
+    <!-- ===== 滑动过渡遮罩 ===== -->
     <div class="slide-mask" id="slideMask"></div>
 
-    <!-- ==================== Vue 3 管理的全屏内容区域 ==================== -->
+    
+    <!-- ===== Vue 3 全屏内容区域 ===== -->
     <div id="vue-app">
-        <!-- Vue Transition 包裹的全屏覆盖层 -->
+        
         <transition name="vue-overlay">
             <div v-if="visible" class="vue-overlay-root">
                 <div class="vue-main-overlay">
-                    <!-- 左侧导航栏 -->
+                    
                     <nav class="vue-sidebar">
                         <div class="vue-sidebar-header">
                             <div class="vue-sidebar-title">鹿禾·LuHe</div>
@@ -1589,7 +1628,7 @@
                     </div>
                 </nav>
 
-                <!-- 右侧内容区 -->
+                
                 <div class="vue-content-area">
                     <div class="vue-content-topbar">
                         <span class="vue-content-title">
@@ -1599,7 +1638,7 @@
                     </div>
                     <div class="vue-content-scroll">
                         <transition name="panel-fade" mode="out-in">
-                            <!-- 场景01：关于我 -->
+                            
                             <div v-if="currentTab === 1" :key="1">
                                 <div class="vue-card">
                                     <div class="vue-card-title">关于鹿禾</div>
@@ -1630,7 +1669,7 @@
                                 </div>
                             </div>
 
-                            <!-- 场景02：项目作品 -->
+                            
                             <div v-if="currentTab === 2" :key="2">
                                 <div class="vue-card" v-for="project in projects" :key="project.id">
                                     <div class="vue-card-title">{{ project.title }}</div>
@@ -1641,7 +1680,7 @@
                                 </div>
                             </div>
 
-                            <!-- 场景03：技能领域 -->
+                            
                             <div v-if="currentTab === 3" :key="3">
                                 <div class="vue-card" v-for="skillGroup in skillGroups" :key="skillGroup.category">
                                     <div class="vue-card-title">{{ skillGroup.category }}</div>
@@ -1656,7 +1695,7 @@
                                 </div>
                             </div>
 
-                            <!-- 场景04：联系方式 -->
+                            
                             <div v-if="currentTab === 4" :key="4">
                                 <div class="vue-card" v-for="contact in contacts" :key="contact.label">
                                     <div class="vue-card-title">{{ contact.label }}</div>
@@ -1681,8 +1720,16 @@
 </div>
 
 <script>
-    // ==================== 粒子连线动画 ====================
-    const canvasEl = document.getElementById('particle-canvas');
+    
+    /**
+         * ============================================================
+         * 粒子连线动画系统 (Canvas 2D)
+         * - 80 个粒子在画布上缓慢漂移
+         * - 距离 < 150px 的粒子之间绘制半透明连线
+         * - 鼠标 120px 范围内粒子受到排斥力
+         * ============================================================
+         */
+        const canvasEl = document.getElementById('particle-canvas');
     const ctx = canvasEl.getContext('2d');
 
     let width, height;
@@ -1690,7 +1737,8 @@
     const particleCount = 80;
     const connectDistance = 150;
 
-    function resize() {
+            /** 调整画布尺寸以匹配视口 */
+        function resize() {
         width = canvasEl.width = window.innerWidth;
         height = canvasEl.height = window.innerHeight;
     }
@@ -1728,14 +1776,19 @@
         }
     }
 
-    function initParticles() {
+            /** 初始化粒子数组 */
+        function initParticles() {
         particles = [];
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
         }
     }
 
-    function drawConnections() {
+            /**
+         * 绘制粒子间连线 — O(n^2) 邻近检测
+         * @description 距离 < 150px 的粒子对绘制半透明连线，透明度随距离衰减
+         */
+        function drawConnections() {
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
@@ -1769,7 +1822,8 @@
 
     let mouseX = -1000;
     let mouseY = -1000;
-    document.addEventListener('mousemove', (e) => {
+            /** 鼠标交互 - 120px 范围内粒子受排斥力 */
+        document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
         particles.forEach(p => {
@@ -1784,15 +1838,21 @@
         });
     });
 
-    // ==================== HTML5 Audio 音乐控制 ====================
-    const bgAudio = document.getElementById('bgAudio');
+    
+    /**
+         * ============================================================
+         * HTML5 Audio 音乐控制系统
+         * ============================================================
+         */
+        const bgAudio = document.getElementById('bgAudio');
     const musicPlayBtn = document.getElementById('musicPlayBtn');
     const volumeSlider = document.getElementById('volumeSlider');
     const noteIcon = musicPlayBtn.querySelector('.note-icon');
 
     bgAudio.volume = parseInt(volumeSlider.value) / 100;
 
-    function updateMusicBtnUI() {
+            /** 同步音乐按钮 UI 与播放状态 */
+        function updateMusicBtnUI() {
         if (bgAudio.paused) {
             musicPlayBtn.classList.remove('playing');
             noteIcon.textContent = '♫';
@@ -1837,12 +1897,24 @@
 
     updateMusicBtnUI();
 
-    // ==================== 页面导航（与Vue联动） ====================
-    const navDashes = document.querySelectorAll('.nav-dash');
+    
+    /**
+         * ============================================================
+         * 页面导航指示器 (test.html 独有)
+         * 4 个横条 dash 对应 Vue 的 4 个标签页，
+         * 点击 dash -> 更新 active 状态 + 同步 Vue currentTab
+         * Vue tab 变化时也回写 dash 状态 (双向绑定)
+         * ============================================================
+         */
+        const navDashes = document.querySelectorAll('.nav-dash');
     let currentPage = 1;
     const totalPages = navDashes.length;
 
-    function updateDashActive(pageNum) {
+            /**
+         * 更新 dash 激活态 + 状态栏文字
+         * @param {number} pageNum - 场景编号 (1-4)
+         */
+        function updateDashActive(pageNum) {
         currentPage = pageNum;
         navDashes.forEach(d => {
             const p = parseInt(d.getAttribute('data-page'));
@@ -1865,7 +1937,7 @@
             const pageNum = parseInt(dash.getAttribute('data-page'));
             if (pageNum === currentPage && !window.vueApp?.visible) return;
             updateDashActive(pageNum);
-            // 如果Vue区域可见，同步切换Vue内部tab
+            
             if (window.vueApp && window.vueApp.visible) {
                 window.vueApp.goToTab(pageNum);
             }
@@ -1873,7 +1945,7 @@
         });
     });
 
-    // ==================== 覆盖层 + 所有UI元素联动 ====================
+    
     const welcomeOverlay = document.getElementById('welcomeOverlay');
     const enterMainBtn = document.getElementById('enterMainBtn');
     const topRightPanel = document.getElementById('topRightPanel');
@@ -1884,7 +1956,7 @@
     const sideLineEl = document.querySelector('.side-line');
     const profileCardEl = document.getElementById('profileCard');
 
-    // 所有需要在overlay期间隐藏的UI元素
+    
     const allUiElements = [
         logoEl,
         topRightPanel,
@@ -1895,8 +1967,11 @@
         profileCardEl
     ];
 
-    // 显示覆盖层（淡入 1s），确保所有UI元素隐藏
-    function showWelcomeOverlay() {
+    
+            /**
+         * 显示欢迎覆盖层 + 隐藏所有固定 UI 元素
+         */
+        function showWelcomeOverlay() {
         if (
             welcomeOverlay &&
             !welcomeOverlay.classList.contains('visible') &&
@@ -1911,7 +1986,7 @@
         }
     }
 
-    // 页面加载后显示覆盖层
+    
     window.addEventListener('load', () => {
         setTimeout(showWelcomeOverlay, 300);
     });
@@ -1919,7 +1994,7 @@
         setTimeout(showWelcomeOverlay, 300);
     }
 
-    // 点击"点击进入主页" → 覆盖层淡出 1s + 所有UI元素淡入 1s
+    
     enterMainBtn.addEventListener('click', () => {
         if (welcomeOverlay.classList.contains('visible')) {
             welcomeOverlay.classList.remove('visible');
@@ -1942,7 +2017,7 @@
         }
     });
 
-    // ==================== 滑动进入交互（触发Vue区域） ====================
+    
     const enterBtn = document.getElementById('enterBtn');
     const slideMask = document.getElementById('slideMask');
 
@@ -1979,14 +2054,18 @@
         mouseDown = false;
     });
 
-    function enterSite() {
-        // 如果Vue区域已经可见，不重复触发
+            /**
+         * 触发滑动进入 -> 打开 Vue 全屏区域
+         * @description 如音乐未播放则自动开始播放
+         */
+        function enterSite() {
+        
         if (window.vueApp && window.vueApp.visible) return;
         slideMask.classList.add('active');
         if (bgAudio.paused) {
             bgAudio.play().then(updateMusicBtnUI).catch(() => {});
         }
-        // 800ms 滑动动画完成后，显示Vue区域
+        
         setTimeout(() => {
             if (window.vueApp) {
                 window.vueApp.show();
@@ -1995,24 +2074,34 @@
         }, 800);
     }
 
-    // 关闭Vue区域（供Vue调用）
-    function closeVueOverlay() {
+    
+            /**
+         * 关闭 Vue 覆盖层 (供 Vue 内部调用)
+         */
+        function closeVueOverlay() {
         if (window.vueApp && window.vueApp.visible) {
             window.vueApp.hide();
         }
-        // 延迟移除遮罩，让Vue退出动画先播放
+        
         setTimeout(() => {
             slideMask.classList.remove('active');
         }, 450);
     }
 
-    // ==================== 键盘快捷键 ====================
-    document.addEventListener('keydown', (e) => {
-        // 如果覆盖层正在显示，忽略快捷键
+    
+    /**
+         * ============================================================
+         * 键盘快捷键
+         * Esc / Space / ArrowUp / ArrowDown / ArrowLeft / ArrowRight
+         * 欢迎覆盖层可见时忽略
+         * ============================================================
+         */
+        document.addEventListener('keydown', (e) => {
+        
         if (welcomeOverlay.classList.contains('visible')) {
             return;
         }
-        // ESC 关闭Vue区域
+        
         if (e.code === 'Escape') {
             if (window.vueApp && window.vueApp.visible) {
                 e.preventDefault();
@@ -2053,7 +2142,7 @@
         }
     });
 
-    // ==================== 初始化粒子 ====================
+    
     window.addEventListener('resize', () => {
         resize();
         initParticles();
@@ -2062,7 +2151,7 @@
     initParticles();
     animate();
 
-    // ==================== Vue 3 应用 ====================
+    
     const vueApp = Vue.createApp({
         data() {
             return {
@@ -2129,38 +2218,45 @@
             currentTabData() {
                 return this.tabs.find(t => t.id === this.currentTab) || this.tabs[0];
             },
-            totalSkillCount() {
+                                /** @returns {number} 技能标签总数 */
+                    totalSkillCount() {
                 return this.skillGroups.reduce((sum, group) => sum + group.skills.length, 0);
             },
         },
         methods: {
             show() {
                 this.visible = true;
-                // 同步外部dash状态
+                
                 updateDashActive(this.currentTab);
                 document.body.style.overflow = 'hidden';
             },
-            hide() {
+                                /** 隐藏覆盖层 + 恢复滚动 */
+                    hide() {
                 this.visible = false;
                 document.body.style.overflow = '';
             },
-            closeOverlay() {
+                                /** 关闭按钮 */
+                    closeOverlay() {
                 closeVueOverlay();
             },
-            goToTab(id) {
+                                /**
+                     * 切换标签页 + 同步外部 dash
+                     * @param {number} id - 标签页 ID (1-4)
+                     */
+                    goToTab(id) {
                 this.currentTab = id;
-                // 同步外部dash状态
+                
                 updateDashActive(id);
             },
         },
         watch: {
             currentTab(newVal) {
-                // 当Vue内部tab变化时，同步外部dash
+                
                 updateDashActive(newVal);
             },
-            visible(newVal) {
+                                visible(newVal) {
                 if (!newVal) {
-                    // Vue区域关闭后，确保body overflow恢复
+                    
                     document.body.style.overflow = '';
                 }
             },
@@ -2170,7 +2266,7 @@
         },
     });
 
-    // 挂载Vue应用并暴露到全局
+    
     const vueInstance = vueApp.mount('#vue-app');
     window.vueApp = vueInstance;
 

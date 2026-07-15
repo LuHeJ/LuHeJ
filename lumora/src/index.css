@@ -1,8 +1,21 @@
+/**
+ * Lumora Design System — Custom Utilities
+ * @description 配合 Tailwind CSS v4 使用的自定义样式：
+ *              - 液态玻璃效果（.liquid-glass）
+ *              - PNG 覆盖层浮动动画（train-bob）
+ *              - Hero 内容颜色过渡（.hero-content）
+ * @note Tailwind v4 使用 @import 语法，无需 PostCSS 配置
+ */
+
 @import "tailwindcss";
 
-/* ============================================
-   Liquid Glass Effect
-   ============================================ */
+/* ===== 液态玻璃效果 =====
+   核心技术：backdrop-filter blur + 伪元素渐变边框
+   - 背景设为近乎透明 (rgba 0.01)，配合 luminosity 混合模式
+   - ::before 伪元素通过 mask-composite: exclude 在容器内侧绘制
+     极细的渐变边框环（1.4px），模拟玻璃厚度的高光边缘
+   - 暗色模式 (.dark) 下切换为深蓝调边框，匹配 Deep Woods 视频氛围
+   ============================================================ */
 .liquid-glass {
   background: rgba(255, 255, 255, 0.01);
   background-blend-mode: luminosity;
@@ -30,7 +43,7 @@
   pointer-events: none;
 }
 
-/* Dark mode liquid glass (for Deep Woods) */
+/* 液态玻璃暗色模式变体 — 配合 "Deep Woods" 视频 (activeVideo === 2) */
 .dark .liquid-glass {
   box-shadow: inset 0 1px 1px rgba(24,44,65,0.15);
 }
@@ -42,9 +55,12 @@
     rgba(24,44,65,0.15) 80%, rgba(24,44,65,0.45) 100%);
 }
 
-/* ============================================
-   Train-bob animation for PNG overlay
-   ============================================ */
+/* ===== train-bob 动画 =====
+   模拟火车车厢轻微晃动的感觉，赋予 PNG 覆盖层生命力。
+   - 3s 周期：足够缓慢以不分散注意力
+   - scale(1.03)：略微放大防止动画过程中边缘露出
+   - translateY(-6px)：仅 6px 位移，保持微妙的呼吸感
+   ============================================================ */
 @keyframes train-bob {
   0%, 100% {
     transform: translateY(0) scale(1.03);
@@ -58,9 +74,12 @@
   animation: train-bob 3s ease-in-out infinite;
 }
 
-/* ============================================
-   Hero content color transition
-   ============================================ */
+/* ===== Hero 内容颜色过渡 =====
+   与视频切换同步 (1000ms opacity 过渡) 的颜色动画：
+   - 700ms duration 略短于视频过渡，让颜色变化感觉更敏捷
+   - 暗色模式：白色 → #182C41（深蓝）
+   - 亮色模式：恢复白色
+   ============================================================ */
 .hero-content {
   transition: color 700ms ease;
 }

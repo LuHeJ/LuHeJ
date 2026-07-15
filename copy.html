@@ -1,4 +1,18 @@
 <!DOCTYPE html>
+<!--
+  @file copy.html
+  @description 鹿禾(LuHe) 个人主页 - 替代设计方案
+                欢迎弹窗向左滑出 + 主内容从右侧滑入的转场动画
+                IntersectionObserver 驱动的滚动入场动画 + Canvas 粒子系统
+  @author LuHe
+  @dependencies Google Fonts (VT323)
+
+  交互流程:
+    1. 页面加载 -> 毛玻璃欢迎弹窗 (背景从清晰渐变到模糊)
+    2. 点击进入主页 -> 弹窗向左滑出 + 主内容从右侧滑入
+    3. 滚动页面 -> 各区块从右侧依次滑入 (IntersectionObserver)
+    4. 卡片子元素带有交错延迟的入场动画
+-->
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +20,8 @@
     <title>鹿禾 - 个人主页</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        :root {
+        /* ===== 设计令牌 (Design Tokens) ===== */
+:root {
             --bg-deep: #050505;
             --bg-card: #121217;
             --bg-card-hover: #1a1a22;
@@ -56,7 +71,9 @@
             min-height: 100%;
         }
 
-        /* ========== 背景光晕 ========== */
+        
+        /* ===== 背景光晕系统 =====
+           3 个独立浮动的模糊光球，各自有不同的动画周期和路径 */
         .bg-orb {
             position: fixed;
             border-radius: 50%;
@@ -123,6 +140,8 @@
             }
         }
 
+        /* ===== 网格纹理 =====
+           径向遮罩使网格向边缘淡出 */
         .grid-bg {
             position: fixed;
             inset: 0;
@@ -136,7 +155,8 @@
             mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
         }
 
-        /* 粒子画布 */
+        
+        /* ===== 粒子画布 ===== */
         #particles-canvas {
             position: fixed;
             inset: 0;
@@ -144,7 +164,10 @@
             pointer-events: none;
         }
 
-        /* ========== 主内容包裹器（页面从右侧滑入动画） ========== */
+        
+        /* ===== 主内容包裹器 =====
+           初始偏移 translateX(130px) + 半透明，
+           .slide-in 后归位，形成从右侧滑入的入场效果 */
         #mainWrapper {
             position: relative;
             z-index: 1;
@@ -159,7 +182,10 @@
             opacity: 1;
         }
 
-        /* ========== 毛玻璃欢迎弹窗（旧页面 - 向左滑出） ========== */
+        
+        /* ===== 毛玻璃欢迎弹窗 =====
+           4 种状态切换：
+           init-state -> show-content -> slide-out -> hidden-final */
         .welcome-overlay {
             position: fixed;
             inset: 0;
@@ -285,7 +311,7 @@
             box-shadow: 0 0 20px rgba(229, 57, 53, 0.4);
         }
 
-        /* ========== 主首屏 ========== */
+        
         .main-hero {
             position: relative;
             width: 100%;
@@ -302,7 +328,8 @@
             min-height: 100vh;
         }
 
-        /* 左上角 logo */
+        
+        /* ===== 左上角品牌标识 ===== */
         .top-left-brand {
             position: absolute;
             top: 32px;
@@ -333,7 +360,8 @@
             opacity: 0.8;
         }
 
-        /* 左下角欢迎文字 */
+        
+        /* ===== 左下角欢迎文字 ===== */
         .bottom-left-welcome {
             position: absolute;
             bottom: 140px;
@@ -348,7 +376,8 @@
             line-height: 1.2;
         }
 
-        /* 左侧按钮区域 */
+        
+        /* ===== 左侧按钮区域 ===== */
         .left-scroll-area {
             position: absolute;
             bottom: 62px;
@@ -445,7 +474,8 @@
             padding-left: 4px;
         }
 
-        /* SCENCE 01 区域 - 横跨底部 */
+        
+        /* ===== 底部场景信息栏 ===== */
         .scene-info-area {
             position: absolute;
             bottom: 16px;
@@ -494,7 +524,8 @@
             box-shadow: 0 0 10px rgba(229, 57, 53, 0.4);
         }
 
-        /* 右侧边界条 */
+        
+        /* ===== 右侧装饰线 ===== */
         .right-border-strip {
             position: absolute;
             right: 5vw;
@@ -513,7 +544,8 @@
             opacity: 0.7;
         }
 
-        /* ========== 主内容容器 ========== */
+        
+        /* ===== 主内容容器 ===== */
         .container {
             max-width: 960px;
             margin: 0 auto;
@@ -522,7 +554,7 @@
             z-index: 1;
         }
 
-        /* 个人介绍区 - 整体从右侧滑入 + 内部元素依次滑入 */
+        
         .hero {
             padding: 70px 0 50px;
             text-align: center;
@@ -539,7 +571,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             filter: drop-shadow(0 0 20px rgba(229, 57, 53, 0.45));
-            /* 从右侧滑入动画初始状态 */
+            
             opacity: 0;
             transform: translateX(55px);
             transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -582,7 +614,7 @@
             will-change: opacity, transform;
         }
 
-        /* 当父级animate-section进入视图后，hero内部元素依次从右侧滑入 */
+        
         .animate-section.in-view .hero h1 {
             opacity: 1;
             transform: translateX(0);
@@ -604,6 +636,7 @@
             transition-delay: 0.30s;
         }
 
+        /* ===== 按钮系统 ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -669,12 +702,15 @@
             box-shadow: 0 0 14px rgba(229, 57, 53, 0.3);
         }
 
-        /* 区块通用 */
+        
         .section {
             padding: 56px 0;
         }
 
-        /* 滚动动画：从右侧滑入 */
+        
+        /* ===== 滚动入场动画 =====
+           IntersectionObserver 触发 .in-view 类，
+           元素从 translateX(80px) 滑入到 0 */
         .animate-section {
             opacity: 0;
             transform: translateX(80px);
@@ -687,7 +723,10 @@
             transform: translateX(0);
         }
 
-        /* 卡片子元素也从右侧滑入（偏移较小，形成层次） */
+        
+        /* ===== 卡片子元素交错延迟 =====
+           每个卡片带 nth-child 递增的 transition-delay，
+           形成瀑布式入场效果 */
         .skills-grid .skill-card,
         .projects-grid .project-card,
         .contact-grid .contact-item {
@@ -705,7 +744,7 @@
             transform: translateX(0);
         }
 
-        /* 卡片错开延迟 */
+        
         .animate-section.in-view .skills-grid .skill-card:nth-child(1) {
             transition-delay: 0.04s;
         }
@@ -754,6 +793,8 @@
             transition-delay: 0.22s;
         }
 
+        /* ===== 区块标题 =====
+           ::before 红色竖线 + 发光效果 */
         .section-title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -775,7 +816,8 @@
             flex-shrink: 0;
         }
 
-        /* 技能卡片 */
+        
+        /* ===== 技能卡片网格 ===== */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -831,7 +873,8 @@
             margin-top: 3px;
         }
 
-        /* 项目卡片 */
+        
+        /* ===== 项目卡片网格 ===== */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -904,7 +947,8 @@
             background: var(--accent-bg-hover);
         }
 
-        /* 联系模块 */
+        
+        /* ===== 联系模块网格 ===== */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -946,7 +990,8 @@
             color: #ff6659;
         }
 
-        /* 页脚 */
+        
+        /* ===== 页脚 ===== */
         .footer {
             text-align: center;
             padding: 32px 0;
@@ -978,7 +1023,8 @@
             }
         }
 
-        /* ========== 响应式适配 ========== */
+        
+        /* ===== 响应式：平板 (<=768px) ===== */
         @media (max-width: 768px) {
             #mainWrapper {
                 transform: translateX(65px);
@@ -1055,13 +1101,13 @@
             .section {
                 padding: 40px 0;
             }
-            /* 移动端animate-section从右侧滑入偏移减小 */
+            
             .animate-section {
                 transform: translateX(40px);
                 transition: opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
                     transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
             }
-            /* 移动端卡片偏移减小 */
+            
             .skills-grid .skill-card,
             .projects-grid .project-card,
             .contact-grid .contact-item {
@@ -1070,7 +1116,7 @@
                     transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1),
                     border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
             }
-            /* 移动端hero内部元素偏移减小 */
+            
             .hero h1 {
                 transform: translateX(30px);
                 transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -1111,6 +1157,7 @@
             }
         }
 
+/* ===== 响应式：手机 (<=400px) ===== */
         @media (max-width: 400px) {
             #mainWrapper {
                 transform: translateX(45px);
@@ -1162,7 +1209,7 @@
             .scroll-down-label {
                 font-size: 0.6rem;
             }
-            /* 超小屏animate-section偏移进一步减小 */
+            
             .animate-section {
                 transform: translateX(28px);
                 transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -1189,14 +1236,15 @@
     </style>
 </head>
 <body>
-    <!-- 背景层 -->
+    
     <div class="bg-orb bg-orb-1"></div>
     <div class="bg-orb bg-orb-2"></div>
     <div class="bg-orb bg-orb-3"></div>
     <div class="grid-bg"></div>
     <canvas id="particles-canvas"></canvas>
 
-    <!-- ========== 毛玻璃欢迎弹窗（旧页面 - 向左滑出） ========== -->
+    
+    <!-- ===== 毛玻璃欢迎弹窗 (初始状态) ===== -->
     <div class="welcome-overlay init-state" id="welcomeOverlay">
         <div class="welcome-bg"></div>
         <div class="welcome-content" id="welcomeContent">
@@ -1205,12 +1253,14 @@
         </div>
     </div>
 
-    <!-- ========== 主内容包裹器（新页面 - 从右侧滑入） ========== -->
+    
+    <!-- ===== 主内容包裹器 (从右侧滑入) ===== -->
     <div id="mainWrapper">
-        <!-- 主首屏 -->
+        
+        <!-- ===== 主首屏 ===== -->
         <div class="main-hero" id="mainHero">
             <div class="main-hero-inner">
-                <!-- 左上角品牌标识 -->
+                
                 <div class="top-left-brand">
                     <span class="dot-bold">·</span>
                     <span class="brand-text">LuHe</span>
@@ -1218,10 +1268,10 @@
                     <span class="brand-tilde">miao~</span>
                 </div>
 
-                <!-- 左下角欢迎文字 -->
+                
                 <div class="bottom-left-welcome">欢迎宾至,鹿禾的主页.</div>
 
-                <!-- 左侧按钮区域 -->
+                
                 <div class="left-scroll-area">
                     <button class="scroll-enter-btn" id="scrollEnterBtn">
                         向右滑动进入
@@ -1230,18 +1280,19 @@
                     <span class="scroll-down-label">SLIDE RIGHT TO ENTER</span>
                 </div>
 
-                <!-- SCENCE 01 信息 - 横跨底部 -->
+                
                 <div class="scene-info-area">
                     <span class="scene-label">SCENCE 01 主 IDLE LOOP</span>
                     <span class="scene-divider"></span>
                 </div>
 
-                <!-- 右侧边界条 -->
+                
                 <div class="right-border-strip"></div>
             </div>
         </div>
 
-        <!-- ========== 主内容区 ========== -->
+        
+        <!-- ===== 主内容区 ===== -->
         <main class="container" id="mainContent">
             <section class="hero animate-section" id="about" data-section="about">
                 <h1>鹿禾</h1>
@@ -1314,8 +1365,15 @@
 
     <script>
         (function() {
-            // ========== 元素引用 ==========
-            const welcomeOverlay = document.getElementById('welcomeOverlay');
+            
+            /**
+         * ============================================================
+         * 欢迎弹窗状态机
+         * init-state -> show-content (内容淡入) -> slide-out (左滑) -> hidden-final (隐藏)
+         * 主内容在弹窗滑出时同步从右侧滑入
+         * ============================================================
+         */
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
             const welcomeContent = document.getElementById('welcomeContent');
             const welcomeEnterBtn = document.getElementById('welcomeEnterBtn');
             const scrollEnterBtn = document.getElementById('scrollEnterBtn');
@@ -1323,46 +1381,58 @@
 
             let welcomeDismissed = false;
 
-            // ========== 欢迎弹窗动画时序 ==========
-            function initWelcomeOverlay() {
-                // 初始状态：init-state（背景清晰无模糊）
-                // 约50ms后移除init-state，触发背景渐变到毛玻璃
+            
+                    /**
+         * 初始化欢迎弹窗动画时序
+         * @description 50ms 后移除 init-state 触发背景渐变到毛玻璃 (1.2s)，
+         *              100ms 后添加 show-content 触发文字淡入
+         * @returns {void}
+         */
+        function initWelcomeOverlay() {
+                
+                
                 setTimeout(() => {
                     welcomeOverlay.classList.remove('init-state');
                 }, 50);
 
-                // 背景渐变约1.2s完成，内容在1.1s后开始淡入
+                
                 setTimeout(() => {
                     welcomeOverlay.classList.add('show-content');
                 }, 100);
             }
 
-            // 关闭欢迎弹窗（触发滑出动画 + 主内容从右侧滑入）
-            function dismissWelcome() {
+            
+                    /**
+         * 关闭欢迎弹窗
+         * @description 弹窗左滑 + 主内容右滑入 + 动画完成后恢复 body 滚动
+         *              welcomeDismissed 标记防止重复触发
+         * @returns {void}
+         */
+        function dismissWelcome() {
                 if (welcomeDismissed) return;
                 welcomeDismissed = true;
 
-                // 弹窗向左滑出
+                
                 welcomeOverlay.classList.add('slide-out');
 
-                // 主内容从右侧滑入
+                
                 setTimeout(() => {
                     mainWrapper.classList.add('slide-in');
                 }, 80);
 
-                // 动画完成后彻底隐藏弹窗，恢复滚动
+                
                 setTimeout(() => {
                     welcomeOverlay.classList.add('hidden-final');
                     document.body.style.overflow = '';
                 }, 750);
             }
 
-            // 点击"进入主页"按钮
+            
             welcomeEnterBtn.addEventListener('click', () => {
                 dismissWelcome();
             });
 
-            // ========== 向右滑动进入按钮 ==========
+            
             scrollEnterBtn.addEventListener('click', () => {
                 const skillsSection = document.getElementById('skills');
                 if (skillsSection) {
@@ -1370,8 +1440,13 @@
                 }
             });
 
-            // ========== 滚动观察器：从右侧滑入动画 ==========
-            const animateSections = document.querySelectorAll('.animate-section');
+            
+                    /**
+         * 滚动观察器 — 从右侧滑入动画
+         * @description rootMargin: -30px 使元素在即将进入视口时提前触发，
+         *              threshold: 0.08 只需 8% 可见即触发
+         */
+        const animateSections = document.querySelectorAll('.animate-section');
             const sectionObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const section = entry.target;
@@ -1383,8 +1458,17 @@
 
             animateSections.forEach(section => sectionObserver.observe(section));
 
-            // ========== 粒子动画 ==========
-            const canvas = document.getElementById('particles-canvas');
+            
+            /**
+         * ============================================================
+         * 粒子动画系统 (Canvas 2D)
+         * - HSL 色相范围 340-360 (红色系)，匹配设计主题
+         * - 粒子环绕屏幕边缘移动 (toroidal wrapping)
+         * - opacity 呼吸式脉动 (0.1-0.7)
+         * - 数量根据屏幕面积动态计算 (上限 120)
+         * ============================================================
+         */
+        const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
             let animationId;
@@ -1436,13 +1520,21 @@
                 }
             }
 
-            function initParticles() {
+                    /**
+         * 根据屏幕面积动态计算粒子数量 (上限 120)
+         * @returns {void}
+         */
+        function initParticles() {
                 const count = Math.min(Math.floor((canvas.width * canvas.height) / 10000), 120);
                 particles = [];
                 for (let i = 0; i < count; i++) particles.push(new Particle());
             }
 
-            function connectParticles() {
+                    /**
+         * 粒子间连线 — 距离 < 130px 绘制半透明红色线段
+         * @returns {void}
+         */
+        function connectParticles() {
                 const maxDist = 130;
                 for (let i = 0; i < particles.length; i++) {
                     for (let j = i + 1; j < particles.length; j++) {
@@ -1462,7 +1554,11 @@
                 }
             }
 
-            function animate() {
+                    /**
+         * requestAnimationFrame 渲染循环
+         * @returns {void}
+         */
+        function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach(p => {
                     p.update();
@@ -1475,14 +1571,17 @@
             initParticles();
             animate();
 
-            // ========== 页面加载初始化 ==========
+            
             initWelcomeOverlay();
 
-            // 防止body在弹窗显示时滚动
+            
             document.body.style.overflow = 'hidden';
 
-            // ========== 清理 ==========
-            window.addEventListener('beforeunload', () => {
+            
+                    /**
+         * 页面卸载前清理 — 取消动画帧 + 断开观察器
+         */
+        window.addEventListener('beforeunload', () => {
                 cancelAnimationFrame(animationId);
                 sectionObserver.disconnect();
             });
