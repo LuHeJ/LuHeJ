@@ -842,6 +842,21 @@ const ResumePanel = {
         };
 
 
+        // ===== 新面板：Code Lab =====
+        const CodelabPanel = {
+          name: 'CodelabPanel',
+          template: '<div class="codelab-panel"><div class="vue-card panel-card code-card" style="--i:0"><div class="vue-card-title">Python — 快速排序</div><pre class="code-block"><code>def quicksort(arr):\n    if len(arr) &lt;= 1: return arr\n    pivot = arr[len(arr) // 2]\n    left  = [x for x in arr if x &lt; pivot]\n    mid   = [x for x in arr if x == pivot]\n    right = [x for x in arr if x &gt; pivot]\n    return quicksort(left) + mid + quicksort(right)</code></pre></div><div class="vue-card panel-card code-card" style="--i:1"><div class="vue-card-title">JavaScript — Debounce</div><pre class="code-block"><code>function debounce(fn, delay = 300) {\n  let timer;\n  return function (...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() =&gt; fn.apply(this, args), delay);\n  };\n}</code></pre></div><div class="vue-card panel-card code-card" style="--i:2"><div class="vue-card-title">CSS — 完美居中</div><pre class="code-block"><code>.center {\n  display: grid;\n  place-items: center;\n}</code></pre></div><div class="vue-card panel-card code-card" style="--i:3"><div class="vue-card-title">SQL — 常用查询</div><pre class="code-block"><code>SELECT u.name, COUNT(o.id) as n\nFROM users u\nLEFT JOIN orders o ON u.id = o.user_id\nWHERE u.created_at &gt;= &apos;2024-01-01&apos;\nGROUP BY u.id\nHAVING n &gt; 5\nORDER BY n DESC;</code></pre></div><div class="vue-card panel-card code-card" style="--i:4"><div class="vue-card-title">Bash — 批量重命名</div><pre class="code-block"><code>#!/bin/bash\ncount=1\nfor f in *.jpg; do\n  mv &quot;$f&quot; &quot;photo_$(printf %03d $count).jpg&quot;\n  ((count++))\ndone</code></pre></div><div class="vue-card panel-card code-card" style="--i:5"><div class="vue-card-title">Git — 撤销操作</div><pre class="code-block"><code># undo last commit (keep changes)\ngit reset --soft HEAD~1\n# discard working changes\ngit checkout -- file\n# edit last commit msg\ngit commit --amend -m &quot;msg&quot;</code></pre></div></div>'
+        };
+
+        // ===== 新面板：前端趋势 =====
+        const TrendsPanel = {
+          name: 'TrendsPanel',
+          template: '<div class="trends-panel"><div class="vue-card panel-card" style="--i:0"><div class="vue-card-title">WebAssembly (WASM)</div><div class="vue-card-desc">浏览器原生支持的二进制指令格式，允许 C/C++/Rust 等语言在 Web 上以接近原生速度运行。</div><div class="vue-tag-row"><span class="vue-tag">性能</span><span class="vue-tag">WASM</span><span class="vue-tag">🔥 热门</span></div></div><div class="vue-card panel-card" style="--i:1"><div class="vue-card-title">CSS Container Queries</div><div class="vue-card-desc">基于父容器尺寸而非视口尺寸的响应式方案。2023 年起主流浏览器全面支持。</div><div class="vue-tag-row"><span class="vue-tag">CSS</span><span class="vue-tag">响应式</span><span class="vue-tag">✅ 已稳定</span></div></div><div class="vue-card panel-card" style="--i:2"><div class="vue-card-title">View Transitions API</div><div class="vue-card-desc">浏览器原生页面过渡动画 API，无需 JS 动画库。Chrome 111+ 已支持。</div><div class="vue-tag-row"><span class="vue-tag">浏览器API</span><span class="vue-tag">动画</span><span class="vue-tag">🆕 新特性</span></div></div><div class="vue-card panel-card" style="--i:3"><div class="vue-card-title">AI 辅助编程</div><div class="vue-card-desc">LLM 驱动的代码生成与审查工具正在改变开发流程，AI 正在成为开发者的标配工具。</div><div class="vue-tag-row"><span class="vue-tag">AI</span><span class="vue-tag">开发工具</span><span class="vue-tag">🚀 高速发展</span></div></div><div class="vue-card panel-card" style="--i:4"><div class="vue-card-title">边缘计算与 Serverless</div><div class="vue-card-desc">代码运行在 CDN 边缘节点，全球低延迟。Cloudflare Workers、Vercel、Deno Deploy 等平台。</div><div class="vue-tag-row"><span class="vue-tag">Serverless</span><span class="vue-tag">边缘计算</span><span class="vue-tag">☁️ 趋势</span></div></div></div>'
+        };
+
+        // 时钟逻辑
+        (function initClock(){var e=document.getElementById('mainClock'),t=e?.querySelector('.clock-time'),d=e?.querySelector('.clock-date');function k(){if(!t)return;var n=new Date();t.textContent=n.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});d.textContent=n.toLocaleDateString('zh-CN')}k();setInterval(k,30000)})();
+
         if (typeof Vue !== 'undefined') {
             const app = Vue.createApp({
                 data() {
@@ -852,7 +867,7 @@ const ResumePanel = {
                             { id: 1, name: '关于我' },
                             { id: 2, name: '技能领域' },
                             { id: 3, name: '联系方式' },
-                            { id: 4, name: '个人简历' }, { id: 5, name: '灵感墙' }, { id: 6, name: '工具箱' }, { id: 7, name: '技术百科' },
+                            { id: 4, name: '个人简历' }, { id: 5, name: '灵感墙' }, { id: 6, name: '工具箱' }, { id: 7, name: '技术百科' }, { id: 8, name: 'Code Lab' }, { id: 9, name: '前端趋势' },
                         ],
                     };
                 },
@@ -909,6 +924,8 @@ const ResumePanel = {
             if (typeof InspirePanel !== 'undefined') app.component('inspire-panel', InspirePanel);
             if (typeof ToolPanel    !== 'undefined') app.component('tool-panel',    ToolPanel);
             if (typeof WikiPanel    !== 'undefined') app.component('wiki-panel',    WikiPanel);
+            if (typeof CodelabPanel !== 'undefined') app.component('codelab-panel', CodelabPanel);
+            if (typeof TrendsPanel  !== 'undefined') app.component('trends-panel',  TrendsPanel);
 
             const vueInstance = app.mount('#vue-app');
             window.vueApp = vueInstance;

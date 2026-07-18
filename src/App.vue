@@ -113,6 +113,9 @@
     </div>
 
     
+    <!-- ===== 主页时钟 ===== -->
+    <div class="main-clock overlay-active" id="mainClock"><div class="clock-time">00:00</div><div class="clock-date">2026/07/18</div></div>
+
     <!-- ===== 滑动过渡遮罩 ===== -->
     <div class="slide-mask" id="slideMask"></div>
 
@@ -123,36 +126,27 @@
             <div v-if="visible" class="vue-overlay-root">
                 <div class="vue-main-overlay">
                     
-                    <nav class="vue-sidebar">
+                    <nav class="vue-sidebar" :class="{ collapsed: sidebarCollapsed }">
                         <div class="vue-sidebar-header">
-                            <div class="vue-sidebar-title">鹿禾·LuHe</div>
-                            <div class="vue-sidebar-subtitle">NAVIGATION</div>
+                            <button class="sidebar-toggle" @click="sidebarCollapsed = !sidebarCollapsed" :title="sidebarCollapsed ? '展开侧边栏' : '折叠侧边栏'">{{ sidebarCollapsed ? '»' : '«' }}</button>
+                            <div class="vue-sidebar-title" v-show="!sidebarCollapsed">鹿禾·LuHe</div>
+                            <div class="vue-sidebar-subtitle" v-show="!sidebarCollapsed">NAVIGATION</div>
                         </div>
                         <div v-for="tab in tabs" :key="tab.id" class="vue-nav-item" :class="{ active: currentTab === tab.id }" @click="goToTab(tab.id)" :title="tab.name">
                             <span class="vue-nav-dot"></span>
-                            <span>{{ tab.name }}</span>
+                            <span v-show="!sidebarCollapsed">{{ tab.name }}</span>
                         </div>
-                        <div class="vue-sidebar-divider">
-                            <span class="divider-dot"></span>
-                            <span class="divider-line"></span>
-                            <span class="divider-dot"></span>
-                            <span class="divider-line"></span>
-                            <span class="divider-dot"></span>
+                        <div class="vue-sidebar-divider" v-show="!sidebarCollapsed">
+                            <span class="divider-dot"></span><span class="divider-line"></span><span class="divider-dot"></span><span class="divider-line"></span><span class="divider-dot"></span>
                         </div>
-                        <div class="vue-sidebar-footer">
-                            <div class="footer-dot-row">
-                                <span></span><span></span><span></span><span></span><span></span>
-                            </div>
+                        <div class="vue-sidebar-footer" v-show="!sidebarCollapsed">
+                            <div class="footer-dot-row"><span></span><span></span><span></span><span></span><span></span></div>
                             <div class="footer-quote">CODE · CREATE · REPEAT</div>
                         </div>
                     </nav>
-
-                    
                     <div class="vue-content-area">
                         <div class="vue-content-topbar">
-                            <span class="vue-content-title">
-                                SCENCE {{ String(currentTab).padStart(2, '0') }} · {{ currentTabData.name }}
-                            </span>
+                            <span class="vue-content-breadcrumb">SCENCE {{ String(currentTab).padStart(2, '0') }}<span class="breadcrumb-sep"> · </span><span class="breadcrumb-name">{{ currentTabData.name }}</span></span>
                             <button class="vue-close-btn" @click="closeOverlay" title="关闭 · 返回主页">✕</button>
                         </div>
                         <div class="vue-content-scroll">
@@ -163,6 +157,8 @@
                                 <inspire-panel v-else-if="currentTab === 5" />
                                 <tool-panel v-else-if="currentTab === 6" />
                                 <wiki-panel v-else-if="currentTab === 7" />
+                                <codelab-panel v-else-if="currentTab === 8" />
+                                <trends-panel v-else-if="currentTab === 9" />
                         </div>
                     </div>
                 </div>
@@ -284,13 +280,72 @@ const WikiPanel = {
   </div>`
 };
 
+// ===== 新面板：Code Lab =====
+const CodelabPanel = {
+  name: 'CodelabPanel',
+  template: `<div class="codelab-panel">
+    <div class="vue-card panel-card code-card" style="--i:0"><div class="vue-card-title">Python — 快速排序</div><pre class="code-block"><code>def quicksort(arr):
+    if len(arr) &lt;= 1: return arr
+    pivot = arr[len(arr) // 2]
+    left  = [x for x in arr if x &lt; pivot]
+    mid   = [x for x in arr if x == pivot]
+    right = [x for x in arr if x &gt; pivot]
+    return quicksort(left) + mid + quicksort(right)</code></pre></div>
+    <div class="vue-card panel-card code-card" style="--i:1"><div class="vue-card-title">JavaScript — Debounce 防抖</div><pre class="code-block"><code>function debounce(fn, delay = 300) {
+  let timer = null;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() =&gt; fn.apply(this, args), delay);
+  };
+}</code></pre></div>
+    <div class="vue-card panel-card code-card" style="--i:2"><div class="vue-card-title">CSS — 完美居中</div><pre class="code-block"><code>.center {
+  display: grid;
+  place-items: center;
+  /* 一行代码实现水平垂直居中 */ }</code></pre></div>
+    <div class="vue-card panel-card code-card" style="--i:3"><div class="vue-card-title">SQL — 常用查询模板</div><pre class="code-block"><code>SELECT u.name, COUNT(o.id) as order_count
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.created_at &gt;= '2024-01-01'
+GROUP BY u.id
+HAVING order_count &gt; 5
+ORDER BY order_count DESC;</code></pre></div>
+    <div class="vue-card panel-card code-card" style="--i:4"><div class="vue-card-title">Bash — 批量重命名</div><pre class="code-block"><code>#!/bin/bash
+count=1
+for file in *.jpg; do
+  mv &quot;$file&quot; &quot;photo_$(printf %03d $count).jpg&quot;
+  ((count++))
+done</code></pre></div>
+    <div class="vue-card panel-card code-card" style="--i:5"><div class="vue-card-title">Git — 撤销操作</div><pre class="code-block"><code># 撤销最后一次 commit（保留修改）
+git reset --soft HEAD~1
+
+# 撤销工作区修改
+git checkout -- filename
+
+# 修改最后一次 commit 信息
+git commit --amend -m &quot;new message&quot;</code></pre></div>
+  </div>`
+};
+
+// ===== 新面板：前端趋势 =====
+const TrendsPanel = {
+  name: 'TrendsPanel',
+  template: `<div class="trends-panel">
+    <div class="vue-card panel-card" style="--i:0"><div class="vue-card-title">WebAssembly (WASM)</div><div class="vue-card-desc">浏览器原生支持的二进制指令格式，允许 C/C++/Rust 等语言在 Web 上以接近原生速度运行。游戏引擎、图像处理、科学计算等高性能场景的首选方案。</div><div class="vue-tag-row"><span class="vue-tag">性能</span><span class="vue-tag">WASM</span><span class="vue-tag">🔥 热门</span></div></div>
+    <div class="vue-card panel-card" style="--i:1"><div class="vue-card-title">CSS Container Queries</div><div class="vue-card-desc">基于父容器尺寸而非视口尺寸的响应式方案。组件可以根据自己所在的容器大小调整样式，真正实现「可复用组件」。2023 年起主流浏览器全面支持。</div><div class="vue-tag-row"><span class="vue-tag">CSS</span><span class="vue-tag">响应式</span><span class="vue-tag">✅ 已稳定</span></div></div>
+    <div class="vue-card panel-card" style="--i:2"><div class="vue-card-title">View Transitions API</div><div class="vue-card-desc">浏览器原生页面过渡动画 API，无需 JS 动画库即可实现 SPA 页面间的平滑过渡。支持 MPA 和 SPA 两种模式，Chrome 111+ 已支持。</div><div class="vue-tag-row"><span class="vue-tag">浏览器API</span><span class="vue-tag">动画</span><span class="vue-tag">🆕 新特性</span></div></div>
+    <div class="vue-card panel-card" style="--i:3"><div class="vue-card-title">AI 辅助编程</div><div class="vue-card-desc">LLM 驱动的代码生成与审查工具正在改变开发流程。从代码补全到全函数生成，从单元测试到重构建议，AI 正在成为开发者的标配工具。</div><div class="vue-tag-row"><span class="vue-tag">AI</span><span class="vue-tag">开发工具</span><span class="vue-tag">🚀 高速发展</span></div></div>
+    <div class="vue-card panel-card" style="--i:4"><div class="vue-card-title">边缘计算与 Serverless</div><div class="vue-card-desc">代码运行在 CDN 边缘节点，全球低延迟。Cloudflare Workers、Vercel Edge Functions、Deno Deploy 等平台让开发者无需管理服务器即可部署全球应用。</div><div class="vue-tag-row"><span class="vue-tag">Serverless</span><span class="vue-tag">边缘计算</span><span class="vue-tag">☁️ 趋势</span></div></div>
+  </div>`
+};
+
 // ===== Vue 应用 =====
 const visible = ref(false)
+const sidebarCollapsed = ref(false)
 const currentTab = ref(1)
 const tabs = [
   { id: 1, name: '关于我' }, { id: 2, name: '技能领域' },
   { id: 3, name: '联系方式' }, { id: 4, name: '个人简历' },
-  { id: 5, name: '灵感墙' },   { id: 6, name: '工具箱' },   { id: 7, name: '技术百科' },
+  { id: 5, name: '灵感墙' },   { id: 6, name: '工具箱' },   { id: 7, name: '技术百科' },   { id: 8, name: 'Code Lab' },   { id: 9, name: '前端趋势' },
 ]
 const currentTabData = computed(() => tabs.find(t => t.id === currentTab.value) || tabs[0])
 const panelMap = { 1: AboutPanel, 2: SkillsPanel, 3: ContactPanel, 4: ResumePanel }
@@ -354,6 +409,11 @@ onMounted(() => {
 
   // 键盘
   document.addEventListener('keydown',e=>{if(welcomeOverlay?.classList.contains('visible'))return;if(e.code==='Escape'){if(visible.value){e.preventDefault();closeOverlay();return}}if(e.code==='Space'&&e.target===document.body&&bgAudio){e.preventDefault();bgAudio.paused?bgAudio.play().then(updateBtnUI).catch(()=>{}):(bgAudio.pause(),updateBtnUI())}if(e.code==='ArrowUp'&&e.target===document.body&&volSlider&&bgAudio){e.preventDefault();const v=Math.min(100,parseInt(volSlider.value)+5);volSlider.value=v;bgAudio.volume=v/100}if(e.code==='ArrowDown'&&e.target===document.body&&volSlider&&bgAudio){e.preventDefault();const v=Math.max(0,parseInt(volSlider.value)-5);volSlider.value=v;bgAudio.volume=v/100}if(e.code==='ArrowRight'&&e.target===document.body){e.preventDefault();if(visible.value&&currentTab.value<4)goToTab(currentTab.value+1)}if(e.code==='ArrowLeft'&&e.target===document.body){e.preventDefault();if(visible.value&&currentTab.value>1)goToTab(currentTab.value-1)}})
+
+  // 时钟
+  const clockEl=document.getElementById('mainClock'),timeEl=clockEl?.querySelector('.clock-time'),dateEl=clockEl?.querySelector('.clock-date');
+  function tick(){if(!timeEl)return;const n=new Date();timeEl.textContent=n.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});dateEl.textContent=n.toLocaleDateString('zh-CN')}
+  tick();setInterval(tick,30000)
 
   console.log('🖤 LuHe 个人主页 (Vite + Vue SFC) 已就绪')
 })
