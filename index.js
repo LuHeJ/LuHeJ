@@ -823,6 +823,19 @@ const ResumePanel = {
          * 左侧导航栏 + 右侧内容区，panel-fade 过渡动画
          * ============================================================
          */
+        // ===== 新面板：灵感墙 =====
+        const InspirePanel = {
+          name: 'InspirePanel',
+          template: '<div class="inspire-panel"><div class="vue-card panel-card" style="--i:0"><div class="inspire-quote">&quot;好的设计是尽可能少的设计。&quot;</div><div class="inspire-author">— Dieter Rams</div></div><div class="vue-card panel-card" style="--i:1"><div class="inspire-quote">&quot;代码是写给人看的，只是顺便让机器执行。&quot;</div><div class="inspire-author">— Harold Abelson</div></div><div class="vue-card panel-card" style="--i:2"><div class="inspire-quote">&quot;简单是复杂的终极形式。&quot;</div><div class="inspire-author">— Leonardo da Vinci</div></div><div class="vue-card panel-card" style="--i:3"><div class="inspire-quote">&quot;Stay hungry, stay foolish.&quot;</div><div class="inspire-author">— Steve Jobs</div></div></div>'
+        };
+
+        // ===== 新面板：工具箱 =====
+        const ToolPanel = {
+          name: 'ToolPanel',
+          template: '<div class="tool-panel"><div class="vue-card panel-card tool-card" style="--i:0"><div class="tool-icon">🖥️</div><div class="vue-card-title">VS Code</div><div class="vue-card-desc">微软开源编辑器，拥有最丰富的插件生态，前端开发首选。</div></div><div class="vue-card panel-card tool-card" style="--i:1"><div class="tool-icon">🎨</div><div class="vue-card-title">Figma</div><div class="vue-card-desc">基于浏览器的协作设计工具，实时多人编辑，设计系统管理。</div></div><div class="vue-card panel-card tool-card" style="--i:2"><div class="tool-icon">🐳</div><div class="vue-card-title">Docker</div><div class="vue-card-desc">容器化平台，一次构建到处运行，简化开发环境配置。</div></div><div class="vue-card panel-card tool-card" style="--i:3"><div class="tool-icon">⚡</div><div class="vue-card-title">Vite</div><div class="vue-card-desc">新一代前端构建工具，基于 ESM 的极速开发服务器。</div></div><div class="vue-card panel-card tool-card" style="--i:4"><div class="tool-icon">📦</div><div class="vue-card-title">Git</div><div class="vue-card-desc">分布式版本控制系统，代码协作的基石。</div></div><div class="vue-card panel-card tool-card" style="--i:5"><div class="tool-icon">🤖</div><div class="vue-card-title">Claude</div><div class="vue-card-desc">AI 编程助手，加速开发流程，提升代码质量。</div></div></div>'
+        };
+
+
         if (typeof Vue !== 'undefined') {
             const app = Vue.createApp({
                 data() {
@@ -833,7 +846,7 @@ const ResumePanel = {
                             { id: 1, name: '关于我' },
                             { id: 2, name: '技能领域' },
                             { id: 3, name: '联系方式' },
-                            { id: 4, name: '个人简历' },
+                            { id: 4, name: '个人简历' }, { id: 5, name: '灵感墙' }, { id: 6, name: '工具箱' },
                         ],
                     };
                 },
@@ -887,6 +900,8 @@ const ResumePanel = {
             if (typeof SkillsPanel  !== 'undefined') app.component('skills-panel',  SkillsPanel);
             if (typeof ContactPanel !== 'undefined') app.component('contact-panel', ContactPanel);
             if (typeof ResumePanel  !== 'undefined') app.component('resume-panel',  ResumePanel);
+            if (typeof InspirePanel !== 'undefined') app.component('inspire-panel', InspirePanel);
+            if (typeof ToolPanel    !== 'undefined') app.component('tool-panel',    ToolPanel);
 
             const vueInstance = app.mount('#vue-app');
             window.vueApp = vueInstance;

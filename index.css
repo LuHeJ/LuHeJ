@@ -1881,3 +1881,46 @@
                 box-shadow: 0 0 16px rgba(220, 70, 70, 0.8), 0 0 28px rgba(200, 50, 50, 0.3);
             }
         }
+
+        /* ===== 新美化：灵感墙引用卡片 ===== */
+        .inspire-quote {
+            font-size: 18px;
+            color: #f0d8d8;
+            line-height: 1.7;
+            letter-spacing: 1px;
+            font-style: italic;
+            padding-left: 16px;
+            border-left: 3px solid rgba(200, 60, 60, 0.5);
+            margin-bottom: 8px;
+        }
+        .inspire-author {
+            font-size: 13px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-align: right;
+        }
+
+        /* ===== 新美化：工具箱卡片 ===== */
+        .tool-card {
+            text-align: center;
+        }
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tool-card:hover .tool-icon {
+            transform: scale(1.2);
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+        .tool-card:hover::before {
+            opacity: 1;
+        }

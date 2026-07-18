@@ -160,6 +160,8 @@
                                 <skills-panel v-else-if="currentTab === 2" />
                                 <contact-panel v-else-if="currentTab === 3" />
                                 <resume-panel v-else-if="currentTab === 4" />
+                                <inspire-panel v-else-if="currentTab === 5" />
+                                <tool-panel v-else-if="currentTab === 6" />
                         </div>
                     </div>
                 </div>
@@ -210,12 +212,73 @@ const ResumePanel = {
   template: '<div class="resume-panel"><div class="vue-card panel-card" style="--i:0"><div class="resume-header"><div class="resume-name-block"><h2>鹿禾 / LuHe</h2><p>Web前端开发 · 全栈实践 · AI增效工程师</p></div><div class="resume-contact-grid"><span><strong>所在城市</strong>河北石家庄</span><span><strong>工作性质</strong>全职 / 远程</span><span><strong>电子邮箱</strong>2743591998@qq.com</span><span><strong>GitHub</strong>github.com/LuHeJ/index.git</span></div></div></div><div class="vue-card panel-card" style="--i:1"><div class="resume-section-title">教育背景</div><div class="timeline-item"><div class="timeline-time">2020.09 - 2023.06</div><div class="timeline-title">计算机应用技术 · 专科</div><div class="timeline-desc">主修课程：Web前端开发、数据结构、数据库原理、Python程序设计、C++程序设计、计算机网络、UI设计基础<br/>专业排名前15%，多次获得学业奖学金。</div></div></div><div class="vue-card panel-card" style="--i:2"><div class="resume-section-title">工作/实习经历</div><div class="timeline-item"><div class="timeline-time">2023.03 - 2023.08</div><div class="timeline-title">苏州极豹信息科技有限公司 · 前端开发实习生</div><div class="timeline-desc">1.基于Vue 3+Element Plus实现20+业务组件；2.配合后端联调，Axios封装统一请求拦截；3.页面响应式适配与浏览器兼容性优化；4.参与代码评审与技术文档编写。</div></div></div><div class="vue-card panel-card" style="--i:3"><div class="resume-section-title">专业技能</div><div class="resume-skill-row" v-for="sk in [{n:&quot;HTML5/CSS3&quot;,w:&quot;90%&quot;,l:&quot;熟练&quot;},{n:&quot;JavaScript&quot;,w:&quot;85%&quot;,l:&quot;熟练&quot;},{n:&quot;Vue 3&quot;,w:&quot;80%&quot;,l:&quot;熟练&quot;},{n:&quot;Python&quot;,w:&quot;70%&quot;,l:&quot;掌握&quot;},{n:&quot;微信小程序&quot;,w:&quot;75%&quot;,l:&quot;掌握&quot;},{n:&quot;AI工具应用&quot;,w:&quot;85%&quot;,l:&quot;熟练&quot;},{n:&quot;PS/剪映&quot;,w:&quot;80%&quot;,l:&quot;熟练&quot;}]" :key="sk.n"><div class="resume-skill-name">{{ sk.n }}</div><div class="resume-skill-bar"><div class="resume-skill-fill" :style="{width:sk.w}"></div></div><div class="resume-skill-level">{{ sk.l }}</div></div></div><div class="vue-card panel-card" style="--i:4"><div class="resume-section-title">项目经验</div><div class="timeline-item"><div class="timeline-time">2024.01-至今</div><div class="timeline-title">个人品牌主页 · 独立开发</div><div class="timeline-desc">独立设计并开发响应式个人主页，融合Canvas粒子动画、Vue 3动态路由、毛玻璃UI等。</div></div><div class="timeline-item"><div class="timeline-time">2023.09-2023.12</div><div class="timeline-title">校园二手交易小程序</div><div class="timeline-desc">微信小程序原生框架+云开发，商品发布、搜索筛选、在线聊天、订单管理。</div></div></div><div class="vue-card panel-card" style="--i:5"><div class="resume-section-title">自我评价</div><div class="vue-card-desc">1.具备扎实的Web前端开发基础，有企业实习经验；2.复合能力突出，覆盖编码、设计、AI、视频四大板块；3.学习能力强，持续关注前端与AI发展趋势；4.工作认真负责，注重代码质量与用户体验。</div></div></div>'
 };
 
+// ===== 新面板：灵感墙 =====
+const InspirePanel = {
+  name: 'InspirePanel',
+  template: `<div class="inspire-panel">
+    <div class="vue-card panel-card" style="--i:0">
+      <div class="inspire-quote">"好的设计是尽可能少的设计。"</div>
+      <div class="inspire-author">— Dieter Rams</div>
+    </div>
+    <div class="vue-card panel-card" style="--i:1">
+      <div class="inspire-quote">"代码是写给人看的，只是顺便让机器执行。"</div>
+      <div class="inspire-author">— Harold Abelson</div>
+    </div>
+    <div class="vue-card panel-card" style="--i:2">
+      <div class="inspire-quote">"简单是复杂的终极形式。"</div>
+      <div class="inspire-author">— Leonardo da Vinci</div>
+    </div>
+    <div class="vue-card panel-card" style="--i:3">
+      <div class="inspire-quote">"Stay hungry, stay foolish."</div>
+      <div class="inspire-author">— Steve Jobs</div>
+    </div>
+  </div>`
+};
+
+// ===== 新面板：工具箱 =====
+const ToolPanel = {
+  name: 'ToolPanel',
+  template: `<div class="tool-panel">
+    <div class="vue-card panel-card tool-card" style="--i:0">
+      <div class="tool-icon">🖥️</div>
+      <div class="vue-card-title">VS Code</div>
+      <div class="vue-card-desc">微软开源编辑器，拥有最丰富的插件生态，前端开发首选。</div>
+    </div>
+    <div class="vue-card panel-card tool-card" style="--i:1">
+      <div class="tool-icon">🎨</div>
+      <div class="vue-card-title">Figma</div>
+      <div class="vue-card-desc">基于浏览器的协作设计工具，实时多人编辑，设计系统管理。</div>
+    </div>
+    <div class="vue-card panel-card tool-card" style="--i:2">
+      <div class="tool-icon">🐳</div>
+      <div class="vue-card-title">Docker</div>
+      <div class="vue-card-desc">容器化平台，一次构建到处运行，简化开发环境配置。</div>
+    </div>
+    <div class="vue-card panel-card tool-card" style="--i:3">
+      <div class="tool-icon">⚡</div>
+      <div class="vue-card-title">Vite</div>
+      <div class="vue-card-desc">新一代前端构建工具，基于 ESM 的极速开发服务器。</div>
+    </div>
+    <div class="vue-card panel-card tool-card" style="--i:4">
+      <div class="tool-icon">📦</div>
+      <div class="vue-card-title">Git</div>
+      <div class="vue-card-desc">分布式版本控制系统，代码协作的基石。</div>
+    </div>
+    <div class="vue-card panel-card tool-card" style="--i:5">
+      <div class="tool-icon">🤖</div>
+      <div class="vue-card-title">Claude</div>
+      <div class="vue-card-desc">AI 编程助手，加速开发流程，提升代码质量。</div>
+    </div>
+  </div>`
+};
+
 // ===== Vue 应用 =====
 const visible = ref(false)
 const currentTab = ref(1)
 const tabs = [
   { id: 1, name: '关于我' }, { id: 2, name: '技能领域' },
   { id: 3, name: '联系方式' }, { id: 4, name: '个人简历' },
+  { id: 5, name: '灵感墙' },   { id: 6, name: '工具箱' },
 ]
 const currentTabData = computed(() => tabs.find(t => t.id === currentTab.value) || tabs[0])
 const panelMap = { 1: AboutPanel, 2: SkillsPanel, 3: ContactPanel, 4: ResumePanel }
