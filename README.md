@@ -1,18 +1,19 @@
 <p align="center">
   <img src="https://img.shields.io/badge/纯手搓-HTML%20%2B%20CSS%20%2B%20JS-e53935?style=for-the-badge&logo=html5&logoColor=white" />
   <img src="https://img.shields.io/badge/框架-Vue%203-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/构建-Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
   <img src="https://img.shields.io/badge/字体-VT323-orange?style=for-the-badge&logo=googlefonts&logoColor=white" />
-  <img src="https://img.shields.io/badge/零依赖-纯原生动画-000?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/动画-Canvas%202D-000?style=for-the-badge" />
 </p>
 
 <h1 align="center">LuHe / 鹿禾 · 个人主页</h1>
 
 <p align="center">
-  暗黑红调 · Canvas 粒子 · 毛玻璃 UI · Vue 3 全屏 SPA
+  暗黑红调 · Canvas 粒子 · 毛玻璃 UI · Vue 3 SFC · Vite 构建
 </p>
 
 <p align="center">
-  <b> 欢迎 Star / Fork / 下载学习二创</b>
+  <b>🇨🇳 纯手搓 · 欢迎 Star / Fork / 二创</b>
 </p>
 
 ---
@@ -27,13 +28,18 @@
 
 ```
 LuHeJ/
-├── index.html      ← HTML 结构 + Vue 模板（509 行）
-├── index.css       ← 全部样式（1812 行）
-├── index.js        ← 全部逻辑（ 568 行）：粒子 / 音频 / Vue App
-├── g1.jpg          ← 左背景图（对角线裁剪）
-├── g2.jpg          ← 右背景图（放大 120% 裁剪水印）
-├── g3.jpg          ← Vue 覆盖层背景图
-├── BGM1.mp3        ← 背景音乐（可选）
+├── index.html          ← Vite 入口
+├── standalone.html     ← 双击即开（全内联，零依赖本机文件）
+├── index.css           ← 全部样式（~1900 行）
+├── index.js            ← 全部逻辑：粒子 / 音频 / 手势 / CDN Vue App
+├── src/
+│   ├── App.vue         ← Vue 3 SFC 主组件
+│   └── main.js         ← createApp 入口
+├── package.json        ← Vite + Vue 3 依赖
+├── vite.config.js      ← Vite 配置
+├── g1.jpg / g2.jpg     ← 左 / 右背景图（clip-path 对角线融合）
+├── g3.jpg              ← Vue 覆盖层背景图
+├── BGM1.mp3            ← 背景音乐（可选）
 └── README.md
 ```
 
@@ -56,29 +62,30 @@ LuHeJ/
 │                                             │
 │   <body> — HTML 结构                       │
 │     ├── <canvas> 粒子画布                   │
-│     ├── 左上 Logo                          │
-│     ├── 右上 音乐控制器                      │
-│     ├── 左下 欢迎区 + 进入按钮                │
-│     ├── 右下 个人信息卡                      │
-│     ├── 底部 状态栏                         │
-│     ├── 毛玻璃 欢迎弹窗                      │
-│     └── <div id="vue-app"> Vue 挂载点       │
-│         ├── 场景 01：关于我                 │
-│         ├── 场景 02：技能领域                │
-│         ├── 场景 03：联系方式                │
-│         └── 场景 04：个人简历                │
+│     ├── 左上 Logo · 右上 音乐控制器           │
+│     ├── 左下 欢迎区 · 右下 信息卡 + 实时时钟   │
+│     ├── 底部 状态栏                          │
+│     ├── 毛玻璃 欢迎弹窗                       │
+│     ├── 半透明毛玻璃 滑动遮罩                  │
+│     └── <div id="vue-app"> Vue 挂载点        │
+│         ├── 可折叠侧边栏 + 面包屑导航           │
+│         ├── 01 关于我 · 02 技能领域            │
+│         ├── 03 联系方式 · 04 个人简历           │
+│         ├── 05 灵感墙 · 06 工具箱              │
+│         ├── 07 技术百科 · 08 Code Lab          │
+│         └── 09 编程导航（36 个开发常用网站）      │
 │                                             │
-│  ⚡ index.js — 核心逻辑                     │
-│     ├── Particle 类 (生成/更新/绘制/连线)     │
-│     ├── 音频控制 (播放/暂停/音量/动画)        │
-│     ├── 欢迎弹窗状态机                       │
-│     ├── 触摸/鼠标手势检测                    │
-│     ├── 键盘快捷键映射                       │
-│     └── Vue.createApp 全屏 SPA              │
-│         ├── data: tabs/skillGroups/contacts │
-│         ├── computed: totalSkillCount       │
-│         ├── methods: show/hide/goToTab      │
-│         └── watch: currentTab→updateStatusBar│
+│  ⚡ index.js — 核心逻辑                      │
+│     ├── Particle 类 (生成/更新/绘制/连线)      │
+│     ├── 音频控制 (播放/暂停/音量/状态同步)      │
+│     ├── 欢迎弹窗状态机                        │
+│     ├── 触摸/鼠标手势检测（右滑进入）            │
+│     ├── 键盘快捷键映射                        │
+│     ├── 实时时钟更新                          │
+│     └── Vue.createApp 全屏 SPA               │
+│         ├── 9 个标签页 · 可折叠侧边栏            │
+│         ├── 9 个面板组件（Options API）         │
+│         └── 侧边栏开关 / 面包屑 / 面板切换动画    │
 └─────────────────────────────────────────────┘
 ```
 
@@ -95,7 +102,7 @@ LuHeJ/
 | **框架** | Vue 3 (CDN) | 全屏覆盖层 SPA，响应式数据驱动面板切换 |
 | **字体** | VT323 (Google Fonts) | 像素终端风格 |
 
-> **零构建、零打包、零 npm。** 拖进浏览器就跑。
+> **双模式运行**：Vite 开发服务器（`npm run dev`） / 双击 `standalone.html` 直接打开
 
 ---
 
@@ -155,12 +162,14 @@ class Particle {
 
 ```bash
 git clone https://github.com/LuHeJ/LuHeJ.git
+cd LuHeJ
 
-# 方式一：直接双击 index.html
+# 方式一：Vite 开发服务器（支持 HMR 热更新）
+npm install
+npm run dev        # → http://localhost:5173
 
-# 方式二：本地服务器
-npx serve .
-# 或 python -m http.server 8080
+# 方式二：双击 standalone.html（全内联，零配置）
+# 方式三：npx serve . 或 python -m http.server 8080
 ```
 
 ---
@@ -170,13 +179,14 @@ npx serve .
 | 想改什么 | 改哪里 |
 |---|---|
 | 颜色主题 | `index.css` → `:root` 里的 CSS 变量 |
-| 字体 | `index.html` → `<link>` 里的 Google Fonts |
+| 字体 | Google Fonts → 替换 VT323 为其他像素字体 |
 | 背景图 | 替换 `g1.jpg` `g2.jpg` `g3.jpg` |
 | 个人信息 | `index.html` → `.profile-card` + `index.js` → Vue `data()` |
-| 技能标签 | `index.js` → `skillGroups` 数组 |
+| 技能标签 | `index.js` → `skillGroups` 数组（SkillsPanel 内） |
 | 粒子数量 | `index.js` → `particleCount = 80` |
 | 连线距离 | `index.js` → `connectDistance = 150` |
-| 内容面板 | `index.html` → `v-if="currentTab === X"` 各区块 |
+| 内容面板 | `src/App.vue` → 各组件的 `template` 或直接修改 HTML 模板 |
+| 新增面板 | `src/App.vue` → tabs 数组加一项 + 新组件定义 + 模板标签 |
 | 背景音乐 | 替换 `BGM1.mp3`（或删 `<audio>` 标签） |
 
 ---
