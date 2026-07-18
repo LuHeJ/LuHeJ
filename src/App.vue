@@ -156,7 +156,10 @@
                             <button class="vue-close-btn" @click="closeOverlay" title="关闭 · 返回主页">✕</button>
                         </div>
                         <div class="vue-content-scroll">
-                            <component :is="panelMap[currentTab]" :key="currentTab" />
+                            <about-panel v-if="currentTab === 1" />
+                                <skills-panel v-else-if="currentTab === 2" />
+                                <contact-panel v-else-if="currentTab === 3" />
+                                <resume-panel v-else-if="currentTab === 4" />
                         </div>
                     </div>
                 </div>
