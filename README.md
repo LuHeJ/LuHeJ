@@ -166,10 +166,10 @@ cd LuHeJ
 
 # 方式一：Vite 开发服务器（支持 HMR 热更新）
 npm install
-npm run dev        # → http://localhost:5173
+npm run dev        # → 按住ctrl（或command）+鼠标左键点击打开http://localhost:####
 
 # 方式二：双击 standalone.html（全内联，零配置）
-# 方式三：npx serve . 或 python -m http.server 8080
+# 方式三：npx serve . 或 python -m http.server ####
 ```
 
 ---
