@@ -1943,54 +1943,6 @@
             50% { transform: translateY(-6px); }
         }
 
-        /* ===== 新美化：色彩系统色板 ===== */
-        .color-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        .color-swatch {
-            height: 70px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: default;
-            position: relative;
-        }
-        .color-swatch:hover {
-            transform: scale(1.06);
-            box-shadow: 0 0 20px rgba(200, 60, 60, 0.4);
-            z-index: 2;
-        }
-        .color-swatch span {
-            font-family: 'VT323', monospace;
-            font-size: 12px;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.9);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-        .color-swatch small {
-            font-family: 'VT323', monospace;
-            font-size: 10px;
-            color: rgba(255,255,255,0.6);
-            margin-top: 2px;
-        }
-
-        /* ===== 新美化：字体排版示例 ===== */
-        .type-sample { display:flex;flex-direction:column;gap:12px; }
-        .type-row { display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid rgba(180,50,50,0.15); }
-        .type-label { font-family:'VT323',monospace;font-size:12px;color:var(--text-dim);letter-spacing:2px;width:50px;flex-shrink:0;text-transform:uppercase; }
-        .type-demo { font-family:'VT323',monospace;color:#f0d8d8; }
-
-        /* ===== 新美化：毛玻璃层级展示 ===== */
-        .glass-stack { display:flex;flex-direction:column;gap:10px; }
-        .glass-layer { height:50px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(25,8,8,0.5);border:1px solid rgba(180,50,50,0.25);transition:transform 0.3s; }
-        .glass-layer:hover { transform:translateX(6px);border-color:rgba(220,70,70,0.5); }
-        .glass-layer span { font-family:'VT323',monospace;font-size:14px;color:#f0d8d8;letter-spacing:2px;background:rgba(0,0,0,0.4);padding:4px 14px;border-radius:6px; }
 
         /* ===== 新美化：毛玻璃扫光 ===== */
         .glass-sweep {

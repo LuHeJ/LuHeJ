@@ -162,7 +162,7 @@
                                 <resume-panel v-else-if="currentTab === 4" />
                                 <inspire-panel v-else-if="currentTab === 5" />
                                 <tool-panel v-else-if="currentTab === 6" />
-                                <design-panel v-else-if="currentTab === 7" />
+                                <wiki-panel v-else-if="currentTab === 7" />
                         </div>
                     </div>
                 </div>
@@ -247,37 +247,39 @@ const ToolPanel = {
   </div>`
 };
 
-// ===== 新面板：设计规范 =====
-const DesignPanel = {
-  name: 'DesignPanel',
-  template: `<div class="design-panel">
+// ===== 新面板：技术百科 =====
+const WikiPanel = {
+  name: 'WikiPanel',
+  template: `<div class="wiki-panel">
     <div class="vue-card panel-card" style="--i:0">
-      <div class="vue-card-title">色彩系统</div>
-      <div class="color-grid">
-        <div class="color-swatch" style="background:#0a0505"><span>bg-deep</span><small>#0a0505</small></div>
-        <div class="color-swatch" style="background:#882222"><span>red-dark</span><small>#882222</small></div>
-        <div class="color-swatch" style="background:#b43838"><span>red-mid</span><small>#b43838</small></div>
-        <div class="color-swatch" style="background:#c84040"><span>red-bright</span><small>#c84040</small></div>
-        <div class="color-swatch" style="background:#e08080"><span>red-light</span><small>#e08080</small></div>
-        <div class="color-swatch" style="background:#f0d8d8"><span>red-pale</span><small>#f0d8d8</small></div>
-      </div>
+      <div class="vue-card-title">RESTful API 设计原则</div>
+      <div class="vue-card-desc">REST (Representational State Transfer) 是面向资源架构的 API 设计风格。核心原则：统一接口、无状态、客户端-服务端分离、资源可缓存、分层系统。URL 应使用名词复数形式，HTTP 方法（GET/POST/PUT/DELETE）对应 CRUD 操作，状态码传达结果语义。</div>
+      <div class="vue-tag-row"><span class="vue-tag">API</span><span class="vue-tag">REST</span><span class="vue-tag">HTTP</span><span class="vue-tag">后端</span></div>
     </div>
     <div class="vue-card panel-card" style="--i:1">
-      <div class="vue-card-title">字体排版</div>
-      <div class="type-sample">
-        <div class="type-row"><span class="type-label">标题</span><span class="type-demo" style="font-size:28px">VT323 28px</span></div>
-        <div class="type-row"><span class="type-label">正文</span><span class="type-demo" style="font-size:15px">VT323 15px</span></div>
-        <div class="type-row"><span class="type-label">辅助</span><span class="type-demo" style="font-size:11px">VT323 11px</span></div>
-        <div class="type-row"><span class="type-label">间距</span><span class="type-demo" style="letter-spacing:3px">letter-spacing 1.5-4px</span></div>
-      </div>
+      <div class="vue-card-title">Git 分支策略</div>
+      <div class="vue-card-desc">Git Flow：main/master（生产）、develop（开发）、feature/*（功能分支）、release/*（发布准备）、hotfix/*（紧急修复）。日常开发在 feature 分支，完成后合并到 develop，发布时创建 release 分支，确认后合并到 main 并打 tag。</div>
+      <div class="vue-tag-row"><span class="vue-tag">Git</span><span class="vue-tag">版本控制</span><span class="vue-tag">协作</span></div>
     </div>
     <div class="vue-card panel-card" style="--i:2">
-      <div class="vue-card-title">毛玻璃层级</div>
-      <div class="glass-stack">
-        <div class="glass-layer" style="backdrop-filter:blur(6px)"><span>轻度模糊 6px</span></div>
-        <div class="glass-layer" style="backdrop-filter:blur(14px)"><span>中度模糊 14px</span></div>
-        <div class="glass-layer" style="backdrop-filter:blur(22px)"><span>重度模糊 22px</span></div>
-      </div>
+      <div class="vue-card-title">CSS Grid vs Flexbox</div>
+      <div class="vue-card-desc">Flexbox 适合一维布局（行或列），内容尺寸决定布局。Grid 适合二维布局（行和列同时），由容器定义网格结构。简单场景用 Flex（导航栏、卡片排列），复杂页面用 Grid（整体布局、仪表盘）。两者可以嵌套使用。</div>
+      <div class="vue-tag-row"><span class="vue-tag">CSS</span><span class="vue-tag">布局</span><span class="vue-tag">前端</span></div>
+    </div>
+    <div class="vue-card panel-card" style="--i:3">
+      <div class="vue-card-title">HTTPS 与 TLS 握手</div>
+      <div class="vue-card-desc">TLS 握手过程：客户端发送支持的加密套件 → 服务端返回证书和公钥 → 客户端验证证书 → 双方协商对称密钥 → 加密通信开始。HTTPS = HTTP over TLS，保证数据在传输过程中的机密性和完整性。</div>
+      <div class="vue-tag-row"><span class="vue-tag">网络</span><span class="vue-tag">安全</span><span class="vue-tag">HTTPS</span></div>
+    </div>
+    <div class="vue-card panel-card" style="--i:4">
+      <div class="vue-card-title">JavaScript 事件循环</div>
+      <div class="vue-card-desc">JS 是单线程语言，通过事件循环实现异步。调用栈执行同步代码，Web APIs 处理异步任务（setTimeout/fetch），任务完成后回调进入任务队列（宏任务/微任务）。微任务（Promise.then）优先于宏任务（setTimeout）执行。</div>
+      <div class="vue-tag-row"><span class="vue-tag">JavaScript</span><span class="vue-tag">异步</span><span class="vue-tag">事件循环</span></div>
+    </div>
+    <div class="vue-card panel-card" style="--i:5">
+      <div class="vue-card-title">Docker 核心概念</div>
+      <div class="vue-card-desc">镜像（Image）：只读模板，包含运行环境和代码。容器（Container）：镜像的运行实例，轻量隔离。Dockerfile：构建镜像的指令文件。Docker Compose：多容器应用编排。卷（Volume）：持久化数据存储。网络：容器间通信。</div>
+      <div class="vue-tag-row"><span class="vue-tag">Docker</span><span class="vue-tag">容器</span><span class="vue-tag">DevOps</span></div>
     </div>
   </div>`
 };
@@ -288,7 +290,7 @@ const currentTab = ref(1)
 const tabs = [
   { id: 1, name: '关于我' }, { id: 2, name: '技能领域' },
   { id: 3, name: '联系方式' }, { id: 4, name: '个人简历' },
-  { id: 5, name: '灵感墙' },   { id: 6, name: '工具箱' },   { id: 7, name: '设计规范' },
+  { id: 5, name: '灵感墙' },   { id: 6, name: '工具箱' },   { id: 7, name: '技术百科' },
 ]
 const currentTabData = computed(() => tabs.find(t => t.id === currentTab.value) || tabs[0])
 const panelMap = { 1: AboutPanel, 2: SkillsPanel, 3: ContactPanel, 4: ResumePanel }
