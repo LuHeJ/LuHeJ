@@ -156,14 +156,7 @@
                             <button class="vue-close-btn" @click="closeOverlay" title="关闭 · 返回主页">✕</button>
                         </div>
                         <div class="vue-content-scroll">
-                            <transition name="panel-fade" mode="out-in">
-                                <div :key="currentTab">
-                                <about-panel v-if="currentTab === 1"></about-panel>
-                                <skills-panel v-if="currentTab === 2"></skills-panel>
-                                <contact-panel v-if="currentTab === 3"></contact-panel>
-                                <resume-panel v-if="currentTab === 4"></resume-panel>
-                                </div>
-                            </transition>
+                            <component :is="panelMap[currentTab]" :key="currentTab" />
                         </div>
                     </div>
                 </div>
@@ -222,6 +215,7 @@ const tabs = [
   { id: 3, name: '联系方式' }, { id: 4, name: '个人简历' },
 ]
 const currentTabData = computed(() => tabs.find(t => t.id === currentTab.value) || tabs[0])
+const panelMap = { 1: AboutPanel, 2: SkillsPanel, 3: ContactPanel, 4: ResumePanel }
 function goToTab(id) { currentTab.value = id; const s = document.querySelector('.status-bar span'); if(s) s.textContent = 'SCENCE ' + String(id).padStart(2,'0') + ' · 主页面' }
 function showVue() { visible.value = true; document.body.style.overflow = 'hidden' }
 function hideVue() { visible.value = false; document.body.style.overflow = '' }
