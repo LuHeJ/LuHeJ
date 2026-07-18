@@ -2010,3 +2010,26 @@
         }
         .main-clock.overlay-active { opacity: 0; pointer-events: none; }
         .main-clock .clock-date { font-size: 12px; color: var(--text-dim); letter-spacing: 2px; }
+
+        /* ===== 编程导航链接网格 ===== */
+        .navi-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .navi-link {
+            display: inline-block;
+            padding: 8px 16px;
+            font-family: 'VT323', monospace;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            color: #e0b0b0;
+            background: rgba(120, 30, 30, 0.3);
+            border: 1px solid rgba(180, 50, 50, 0.3);
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .navi-link:hover {
+            background: rgba(180, 40, 40, 0.5);
+            border-color: rgba(220, 60, 60, 0.6);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(200, 40, 40, 0.35);
+            transform: translateY(-2px);
+        }
