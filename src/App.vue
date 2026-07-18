@@ -162,6 +162,7 @@
                                 <resume-panel v-else-if="currentTab === 4" />
                                 <inspire-panel v-else-if="currentTab === 5" />
                                 <tool-panel v-else-if="currentTab === 6" />
+                                <gallery-panel v-else-if="currentTab === 7" />
                         </div>
                     </div>
                 </div>
@@ -216,22 +217,14 @@ const ResumePanel = {
 const InspirePanel = {
   name: 'InspirePanel',
   template: `<div class="inspire-panel">
-    <div class="vue-card panel-card" style="--i:0">
-      <div class="inspire-quote">"好的设计是尽可能少的设计。"</div>
-      <div class="inspire-author">— Dieter Rams</div>
-    </div>
-    <div class="vue-card panel-card" style="--i:1">
-      <div class="inspire-quote">"代码是写给人看的，只是顺便让机器执行。"</div>
-      <div class="inspire-author">— Harold Abelson</div>
-    </div>
-    <div class="vue-card panel-card" style="--i:2">
-      <div class="inspire-quote">"简单是复杂的终极形式。"</div>
-      <div class="inspire-author">— Leonardo da Vinci</div>
-    </div>
-    <div class="vue-card panel-card" style="--i:3">
-      <div class="inspire-quote">"Stay hungry, stay foolish."</div>
-      <div class="inspire-author">— Steve Jobs</div>
-    </div>
+    <div class="vue-card panel-card float-card" style="--i:0;--float-duration:4s;--float-delay:0s"><div class="inspire-quote">&quot;好的设计是尽可能少的设计。&quot;</div><div class="inspire-author">— Dieter Rams</div></div>
+    <div class="vue-card panel-card float-card" style="--i:1;--float-duration:4.5s;--float-delay:0.3s"><div class="inspire-quote">&quot;代码是写给人看的，只是顺便让机器执行。&quot;</div><div class="inspire-author">— Harold Abelson</div></div>
+    <div class="vue-card panel-card float-card" style="--i:2;--float-duration:5s;--float-delay:0.6s"><div class="inspire-quote">&quot;简单是复杂的终极形式。&quot;</div><div class="inspire-author">— Leonardo da Vinci</div></div>
+    <div class="vue-card panel-card float-card" style="--i:3;--float-duration:4.2s;--float-delay:0.9s"><div class="inspire-quote">&quot;Stay hungry, stay foolish.&quot;</div><div class="inspire-author">— Steve Jobs</div></div>
+    <div class="vue-card panel-card float-card" style="--i:4;--float-duration:3.8s;--float-delay:0.2s"><div class="inspire-quote">&quot;世上本没有路，走的人多了，也便成了路。&quot;</div><div class="inspire-author">— 鲁迅</div></div>
+    <div class="vue-card panel-card float-card" style="--i:5;--float-duration:4.7s;--float-delay:0.5s"><div class="inspire-quote">&quot;The best way to predict the future is to invent it.&quot;</div><div class="inspire-author">— Alan Kay</div></div>
+    <div class="vue-card panel-card float-card" style="--i:6;--float-duration:5.2s;--float-delay:0.8s"><div class="inspire-quote">&quot;创造性的行为，源自于对常识的怀疑。&quot;</div><div class="inspire-author">— 宫本茂</div></div>
+    <div class="vue-card panel-card float-card" style="--i:7;--float-duration:4.0s;--float-delay:1.1s"><div class="inspire-quote">&quot;Any fool can write code that a computer can understand. Good programmers write code that humans can understand.&quot;</div><div class="inspire-author">— Martin Fowler</div></div>
   </div>`
 };
 
@@ -239,35 +232,52 @@ const InspirePanel = {
 const ToolPanel = {
   name: 'ToolPanel',
   template: `<div class="tool-panel">
-    <div class="vue-card panel-card tool-card" style="--i:0">
-      <div class="tool-icon">🖥️</div>
-      <div class="vue-card-title">VS Code</div>
-      <div class="vue-card-desc">微软开源编辑器，拥有最丰富的插件生态，前端开发首选。</div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:0"><div class="tool-icon">🧠</div><div class="vue-card-title">IntelliJ IDEA</div><div class="vue-card-desc">主力 IDE，智能代码补全与重构，Java/前端/全栈一站式开发。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:1"><div class="tool-icon">🖥️</div><div class="vue-card-title">VS Code</div><div class="vue-card-desc">轻量编辑器，插件生态丰富，前端快速迭代首选。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:2"><div class="tool-icon">🎨</div><div class="vue-card-title">Figma</div><div class="vue-card-desc">浏览器端协作设计，实时多人编辑，设计系统与原型交付。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:3"><div class="tool-icon">🐳</div><div class="vue-card-title">Docker</div><div class="vue-card-desc">容器化平台，环境隔离，一次构建到处运行。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:4"><div class="tool-icon">⚡</div><div class="vue-card-title">Vite</div><div class="vue-card-desc">新一代构建工具，ESM 原生驱动，毫秒级 HMR。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:5"><div class="tool-icon">📦</div><div class="vue-card-title">Git</div><div class="vue-card-desc">分布式版本控制，分支策略，团队协作基石。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:6"><div class="tool-icon">🤖</div><div class="vue-card-title">Claude</div><div class="vue-card-desc">AI 编程助手，代码生成与审查，加速开发迭代。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:7"><div class="tool-icon">📮</div><div class="vue-card-title">Postman</div><div class="vue-card-desc">API 调试与测试，请求集合管理，团队协作。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:8"><div class="tool-icon">🔍</div><div class="vue-card-title">Chrome DevTools</div><div class="vue-card-desc">浏览器开发者工具，性能分析，DOM 调试，网络监控。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:9"><div class="tool-icon">💻</div><div class="vue-card-title">Terminal</div><div class="vue-card-desc">命令行终端，Shell 脚本，自动化任务，服务器管理。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:10"><div class="tool-icon">🖼️</div><div class="vue-card-title">Photoshop</div><div class="vue-card-desc">图像编辑与设计，位图处理，UI 素材制作。</div></div>
+    <div class="vue-card panel-card tilt-card tool-card" style="--i:11"><div class="tool-icon">📝</div><div class="vue-card-title">Notion</div><div class="vue-card-desc">全功能笔记与知识库，项目管理，文档协作。</div></div>
+  </div>`
+};
+
+// ===== 新面板：画廊 =====
+const GalleryPanel = {
+  name: 'GalleryPanel',
+  template: `<div class="gallery-panel">
+    <div class="vue-card panel-card" style="--i:0">
+      <div class="vue-card-title">渐变边框旋转</div>
+      <div class="gallery-demo-border">HOVER ME</div>
+      <div class="vue-card-desc" style="margin-top:10px">纯 CSS @keyframes 实现边框渐变色旋转，hover 触发。</div>
     </div>
-    <div class="vue-card panel-card tool-card" style="--i:1">
-      <div class="tool-icon">🎨</div>
-      <div class="vue-card-title">Figma</div>
-      <div class="vue-card-desc">基于浏览器的协作设计工具，实时多人编辑，设计系统管理。</div>
+    <div class="vue-card panel-card" style="--i:1">
+      <div class="vue-card-title">毛玻璃深度对比</div>
+      <div style="display:flex;gap:12px">
+        <div class="glass-demo" style="backdrop-filter:blur(4px)"><span>4px</span></div>
+        <div class="glass-demo" style="backdrop-filter:blur(12px)"><span>12px</span></div>
+        <div class="glass-demo" style="backdrop-filter:blur(24px)"><span>24px</span></div>
+      </div>
+      <div class="vue-card-desc" style="margin-top:10px">backdrop-filter blur 值越大越朦胧，对比不同深度的毛玻璃效果。</div>
     </div>
-    <div class="vue-card panel-card tool-card" style="--i:2">
-      <div class="tool-icon">🐳</div>
-      <div class="vue-card-title">Docker</div>
-      <div class="vue-card-desc">容器化平台，一次构建到处运行，简化开发环境配置。</div>
+    <div class="vue-card panel-card" style="--i:2">
+      <div class="vue-card-title">发光按钮</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="glow-btn glow-red">红色光</button>
+        <button class="glow-btn glow-white">白色光</button>
+        <button class="glow-btn glow-pulse">脉冲</button>
+      </div>
+      <div class="vue-card-desc" style="margin-top:10px">box-shadow 发光 + @keyframes pulse 呼吸，悬停增强。</div>
     </div>
-    <div class="vue-card panel-card tool-card" style="--i:3">
-      <div class="tool-icon">⚡</div>
-      <div class="vue-card-title">Vite</div>
-      <div class="vue-card-desc">新一代前端构建工具，基于 ESM 的极速开发服务器。</div>
-    </div>
-    <div class="vue-card panel-card tool-card" style="--i:4">
-      <div class="tool-icon">📦</div>
-      <div class="vue-card-title">Git</div>
-      <div class="vue-card-desc">分布式版本控制系统，代码协作的基石。</div>
-    </div>
-    <div class="vue-card panel-card tool-card" style="--i:5">
-      <div class="tool-icon">🤖</div>
-      <div class="vue-card-title">Claude</div>
-      <div class="vue-card-desc">AI 编程助手，加速开发流程，提升代码质量。</div>
+    <div class="vue-card panel-card" style="--i:3">
+      <div class="vue-card-title">故障文字效果</div>
+      <div class="glitch-text" data-text="GLITCH EFFECT">GLITCH EFFECT</div>
+      <div class="vue-card-desc" style="margin-top:10px">::before / ::after 伪元素错位叠加，clip-path 裁剪实现 RGB 分离。</div>
     </div>
   </div>`
 };
@@ -278,7 +288,7 @@ const currentTab = ref(1)
 const tabs = [
   { id: 1, name: '关于我' }, { id: 2, name: '技能领域' },
   { id: 3, name: '联系方式' }, { id: 4, name: '个人简历' },
-  { id: 5, name: '灵感墙' },   { id: 6, name: '工具箱' },
+  { id: 5, name: '灵感墙' },   { id: 6, name: '工具箱' },   { id: 7, name: '画廊' },
 ]
 const currentTabData = computed(() => tabs.find(t => t.id === currentTab.value) || tabs[0])
 const panelMap = { 1: AboutPanel, 2: SkillsPanel, 3: ContactPanel, 4: ResumePanel }
